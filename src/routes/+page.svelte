@@ -21,11 +21,11 @@
 		renderer.setSize(container.clientWidth, container.clientHeight);
 		container.appendChild(renderer.domElement);
 
-		renderer.setClearColor(0xd9e7fc); // Darker gray background
+		renderer.setClearColor(0xd9e7fc);
 
 		// Load model
 		console.log('Loading model...');
-		model = await LoadStep('/Gripper01.stp');
+		model = await LoadStep('/plate-2.STEP');
 		console.log('Model loaded:', model);
 
 		if (model) {
@@ -52,7 +52,7 @@
 		// Rendering loop
 		function animate() {
 			requestAnimationFrame(animate);
-			controls.update(); // Only required if controls.enableDamping is set to true
+			controls.update();
 			renderer.render(scene, camera);
 		}
 		animate();
@@ -65,6 +65,6 @@
 	.canvas-container {
 		outline: 1px solid plum;
 		width: 100%;
-		height: 500px; /* Adjust the height as necessary */
+		height: 500px;
 	}
 </style>

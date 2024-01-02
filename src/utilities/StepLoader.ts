@@ -1,15 +1,13 @@
 import * as THREE from 'three';
 import occtimportjs from 'occt-import-js';
-// import occtimportWasm from 'occt-import-js/dist/occt-import-js.wasm'
 
-// const wasmBlob = dataURItoBlob(occtimportWasm)
-// const wasmUrl = URL.createObjectURL(wasmBlob)
+/**
+ * Reference REPL @see https://codesandbox.io/p/sandbox/5nfq9t?file=%2Fsrc%2FApp.js
+ */
+
 const wasmUrl = 'https://cdn.jsdelivr.net/npm/occt-import-js@0.0.12/dist/occt-import-js.wasm';
 
 export async function LoadStep(fileUrl) {
-	// const occtimportWasm = await import('occt-import-js/dist/occt-import-js.wasm').then((res) => res.default)
-
-	// console.log('occtimportWasm', occtimportWasm)
 	const targetObject = new THREE.Object3D();
 
 	// init occt-import-js
@@ -21,8 +19,6 @@ export async function LoadStep(fileUrl) {
 		}
 	});
 
-	// download a step file
-	// let fileUrl = '../test/testfiles/cax-if/as1_pe_203.stp';
 	const response = await fetch(fileUrl);
 	const buffer = await response.arrayBuffer();
 
@@ -60,27 +56,3 @@ export async function LoadStep(fileUrl) {
 	}
 	return targetObject;
 }
-
-// function dataURItoBlob(dataURI) {
-// 	// convert base64 to raw binary data held in a string
-// 	// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-// 	var byteString = atob(dataURI.split(',')[1]);
-
-// 	// separate out the mime component
-// 	var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-// 	// write the bytes of the string to an ArrayBuffer
-// 	var ab = new ArrayBuffer(byteString.length);
-
-// 	// create a view into the buffer
-// 	var ia = new Uint8Array(ab);
-
-// 	// set the bytes of the buffer to the correct values
-// 	for (var i = 0; i < byteString.length; i++) {
-// 		ia[i] = byteString.charCodeAt(i);
-// 	}
-
-// 	// write the ArrayBuffer to a blob, and you're done
-// 	var blob = new Blob([ab], { type: mimeString });
-// 	return blob;
-// }
