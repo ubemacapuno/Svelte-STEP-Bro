@@ -176,7 +176,7 @@
 	.canvas-container {
 		outline: 1px solid black;
 		width: 100%;
-		height: 100%;
+		height: 90vh;
 		position: relative;
 	}
 	.canvas_center {
