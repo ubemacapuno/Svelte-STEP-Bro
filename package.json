@@ -39,7 +39,6 @@
 	"dependencies": {
 		"OrbitControls": "link:three/examples/jsm/controls/OrbitControls",
 		"occt-import-js": "0.0.12",
-		"three": "0.144.0",
-		"threlte": "^3.13.1"
+		"three": "0.160.0"
 	}
 }
