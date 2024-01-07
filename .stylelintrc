@@ -1,0 +1,52 @@
+{
+	"extends": ["stylelint-config-standard"],
+	"plugins": [
+		"stylelint-high-performance-animation",
+		"stylelint-declaration-strict-value",
+		"stylelint-order"
+	],
+	"rules": {
+		"custom-property-pattern": "^([a-z][a-z0-9]*)(_[a-z0-9]+)*$",
+		"declaration-block-no-duplicate-custom-properties": true,
+		"declaration-colon-newline-after": null,
+		"import-notation": "string",
+		"indentation": "tab",
+		"max-nesting-depth": 3,
+		"media-feature-name-disallowed-list": [
+			"^max-width",
+			{
+				"message": "Use min-width for a mobile-first approach (media-feature-name-blacklist)"
+			}
+		],
+		"order/order": ["custom-properties", "declarations"],
+		"plugin/no-low-performance-animation-properties": [
+			true,
+			{
+				"ignoreProperties": ["color", "background-color", "box-shadow", "padding"]
+			}
+		],
+		"scale-unlimited/declaration-strict-value": [
+			["/color$/", "z-index", "font-size", "box-shadow"]
+		],
+		"selector-class-pattern": [
+			"^([a-z][a-z0-9]*)(_[a-z0-9]+)*$",
+			{
+				"message": "Lowercase with underscores for class_names please"
+			}
+		],
+		"selector-max-compound-selectors": 4,
+		"selector-no-qualifying-type": [
+			true,
+			{
+				"ignore": ["attribute"]
+			}
+		],
+		"selector-pseudo-class-no-unknown": [
+			true,
+			{
+				"ignorePseudoClasses": ["global"]
+			}
+		],
+		"unit-disallowed-list": ["em"]
+	}
+}

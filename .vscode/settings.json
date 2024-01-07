@@ -1,0 +1,4 @@
+{
+	"cSpell.words": ["autoimport"],
+	"svelte.plugin.svelte.compilerWarnings": { "missing-declaration": "ignore" }
+}

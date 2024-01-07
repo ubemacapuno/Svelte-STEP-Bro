@@ -1,172 +1,183 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
-	import * as THREE from 'three';
-	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-	import { LoadStep } from '../utilities/StepLoader';
-	import Loader from '$lib/components/Loader.svelte';
+	import { onMount, onDestroy } from 'svelte'
+	import * as THREE from 'three'
+	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+	import { LoadStep } from '../utilities/StepLoader'
+	import Loader from '$lib/components/Loader.svelte'
+	import MenuItem from '$lib/components/MenuItem.svelte'
+	import Tooltip from '$lib/components/Tooltip.svelte'
+	import IconButton from '$elements/IconButton.svelte'
 
-	type ModelSource = string | File;
-	type CallbackFunction = (...args: any[]) => any;
+	type ModelSource = string | File
+	type CallbackFunction = (...args: any[]) => any
 
 	// THREEjs Vars:
-	let container: HTMLElement | null = null;
-	let model: THREE.Object3D | null;
-	let scene: THREE.Scene;
-	let camera: THREE.PerspectiveCamera;
-	let renderer: THREE.WebGLRenderer;
-	let controls: OrbitControls;
+	let container: HTMLElement | null = null
+	let model: THREE.Object3D | null
+	let scene: THREE.Scene
+	let camera: THREE.PerspectiveCamera
+	let renderer: THREE.WebGLRenderer
+	let controls: OrbitControls
 
-	let isModelLoading = false;
-	let isModelRendered: boolean = false;
-	let fileName = '';
-	let debouncedResize: (...args: any[]) => void;
+	let isModelLoading = false
+	let isModelRendered: boolean = false
+	let fileName = ''
+	let debouncedResize: (...args: any[]) => void
 
-	const demoUrl = '/demo.STEP';
+	const demoUrl = '/demo.stp'
 
 	onMount(() => {
 		// Initialize scene, camera, and renderer,
 		// but make sure container and window exist first
 		if (container && typeof window !== 'undefined') {
-			scene = new THREE.Scene();
+			scene = new THREE.Scene()
 			camera = new THREE.PerspectiveCamera(
 				75,
 				container.clientWidth / container.clientHeight,
 				0.1,
 				100000
-			);
-			renderer = new THREE.WebGLRenderer({ antialias: true });
-			renderer.setClearColor(0x202020);
-			renderer.setSize(container.clientWidth, container.clientHeight);
+			)
+			renderer = new THREE.WebGLRenderer({ antialias: true })
+			renderer.setClearColor(0x232323)
+			renderer.setSize(container.clientWidth, container.clientHeight)
 
-			container.appendChild(renderer.domElement);
+			container.appendChild(renderer.domElement)
 
 			// Add ambient light
-			const ambientLight = new THREE.AmbientLight(0xffffff);
-			scene.add(ambientLight);
+			const ambientLight = new THREE.AmbientLight(0xffffff)
+			scene.add(ambientLight)
 
 			// Add directional light
-			const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
-			directionalLight.position.set(5, 5, 5);
-			scene.add(directionalLight);
+			const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7)
+			directionalLight.position.set(5, 5, 5)
+			scene.add(directionalLight)
 
 			// Initialize OrbitControls
-			controls = new OrbitControls(camera, renderer.domElement);
+			controls = new OrbitControls(camera, renderer.domElement)
 
 			// Rendering loop
 			function animate() {
-				requestAnimationFrame(animate);
+				requestAnimationFrame(animate)
 				if (controls) {
-					controls.update();
+					controls.update()
 				}
-				renderer.render(scene, camera);
+				renderer.render(scene, camera)
 			}
-			animate();
-			debouncedResize = debounce(onWindowResize, 1500);
-			window.addEventListener('resize', debouncedResize);
+			animate()
+			debouncedResize = debounce(onWindowResize, 1500)
+			window.addEventListener('resize', debouncedResize)
 
 			// Ensure initial sizing is correct
-			onWindowResize();
+			onWindowResize()
 		} else {
-			console.error('Container and/or Window elements are undefined.');
+			console.error('Container and/or Window elements are undefined.')
 		}
-	});
+	})
 
 	onDestroy(() => {
 		if (typeof window !== 'undefined') {
-			window.removeEventListener('resize', debouncedResize);
+			window.removeEventListener('resize', debouncedResize)
 		}
-	});
+	})
 
 	async function loadAndHandleModel(modelSource: ModelSource) {
-		fileName = modelSource instanceof File ? modelSource.name : 'demo.STEP';
-		isModelLoading = true;
+		fileName = modelSource instanceof File ? modelSource.name : 'demo.stp'
+		isModelLoading = true
 
-		clearModel();
-		model = await LoadStep(modelSource);
+		clearModel()
+		model = await LoadStep(modelSource)
 
 		if (model) {
-			isModelRendered = true;
-			scene.add(model);
-			const bbox = new THREE.Box3().setFromObject(model);
-			const center = bbox.getCenter(new THREE.Vector3());
-			model.position.sub(center); // Center the model
+			isModelRendered = true
+			scene.add(model)
+			const bbox = new THREE.Box3().setFromObject(model)
+			const center = bbox.getCenter(new THREE.Vector3())
+			model.position.sub(center) // Center the model
 
 			// Create edge geometry from the mesh
-			const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 1 });
+			const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 1 })
 			model.traverse((child) => {
 				if (child instanceof THREE.Mesh) {
-					const edges = new THREE.EdgesGeometry(child.geometry);
-					const edgeLine = new THREE.LineSegments(edges, edgeMaterial);
-					child.add(edgeLine);
+					const edges = new THREE.EdgesGeometry(child.geometry)
+					const edgeLine = new THREE.LineSegments(edges, edgeMaterial)
+					child.add(edgeLine)
 				}
-			});
+			})
 
-			camera.position.set(0, 50, 100);
-			camera.lookAt(center);
+			camera.position.set(0, 50, 100)
+			camera.lookAt(center)
 
-			isModelLoading = false;
+			isModelLoading = false
 		}
 	}
 
 	async function handleFileChange(event: Event) {
-		const input = event.target as HTMLInputElement;
+		const input = event.target as HTMLInputElement
 		if (input.files && input.files[0]) {
-			await loadAndHandleModel(input.files[0]); // Pass the file to the new function
+			await loadAndHandleModel(input.files[0]) // Pass the file to the new function
 		}
 	}
 
 	function triggerFileInput() {
-		const fileInput = document.getElementById('fileInput');
-		fileInput?.click();
+		const fileInput = document.getElementById('fileInput')
+		fileInput?.click()
 	}
 	function clearModel() {
 		if (model && scene) {
-			fileName = '';
-			scene.remove(model);
+			fileName = ''
+			scene.remove(model)
 			model.traverse((child) => {
 				if (child instanceof THREE.Mesh) {
-					child.geometry.dispose();
+					child.geometry.dispose()
 					if (Array.isArray(child.material)) {
-						child.material.forEach((material) => material.dispose());
+						child.material.forEach((material) => material.dispose())
 					} else {
-						child.material.dispose();
+						child.material.dispose()
 					}
 				}
-			});
-			isModelRendered = false;
+			})
+			isModelRendered = false
 		}
+		model = null
 	}
 
 	function debounce(func: CallbackFunction, timeout = 300) {
-		let timer: number | undefined;
+		let timer: number | undefined
 		return (...args: any[]) => {
-			clearTimeout(timer);
+			clearTimeout(timer)
 			timer = setTimeout(() => {
-				func.apply(this, args);
-			}, timeout);
-		};
+				func.apply(this, args)
+			}, timeout)
+		}
 	}
 
 	function onWindowResize() {
 		if (camera && renderer && container) {
-			camera.aspect = container.clientWidth / container.clientHeight;
-			camera.updateProjectionMatrix();
-			renderer.setSize(container.clientWidth, container.clientHeight);
+			camera.aspect = container.clientWidth / container.clientHeight
+			camera.updateProjectionMatrix()
+			renderer.setSize(container.clientWidth, container.clientHeight)
 		}
 	}
 
 	async function loadDemoFile() {
-		await loadAndHandleModel(demoUrl); // Pass the URL to the new function
+		await loadAndHandleModel(demoUrl) // Pass the URL to the new function
 	}
 </script>
 
 <div class="tool_container">
-	<button on:click={triggerFileInput}>Load File</button>
-	<button on:click={loadDemoFile}>Demo</button>
+	<Tooltip content="Select a File" placement="bottom">
+		<MenuItem iconName="folder_open" on:click={triggerFileInput} />
+	</Tooltip>
+	<Tooltip content="Load a Demo File" placement="bottom">
+		<MenuItem iconName="engineering" on:click={loadDemoFile} />
+	</Tooltip>
 	{#if model}
-		<button on:click={clearModel}>Clear</button>
+		<Tooltip content="Clear Model" placement="bottom">
+			<IconButton name="cancel" accent="warning" on:click={clearModel} />
+		</Tooltip>
 	{/if}
 </div>
+
 <div bind:this={container} class="canvas-container">
 	{#if isModelLoading}
 		<div class="canvas_center">
@@ -192,7 +203,17 @@
 	{/if}
 </div>
 
-<style>
+<style lang="postcss">
+	.tool_container {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		padding: 0 var(--gap_smallest);
+		gap: var(--gap_smallest);
+		width: 100%;
+		background-color: var(--grey_5);
+	}
 	.canvas-container {
 		height: 90vh;
 		width: 100%;
@@ -209,15 +230,6 @@
 	.flex {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.tool_container {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: center;
-		width: 100%;
-		background-color: var(--grey_6);
 	}
 
 	.file_name_container {

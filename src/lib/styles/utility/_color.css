@@ -1,0 +1,68 @@
+/* COLORS */
+.success_color {
+	color: var(--success_color);
+}
+
+.primary_color {
+	color: var(--primary_color);
+}
+
+.secondary_color {
+	color: var(--secondary_color);
+}
+
+.warning_color {
+	color: var(--warning_color);
+}
+
+.caution_color {
+	color: var(--caution_color);
+}
+
+.disabled_color {
+	color: var(--disabled_color);
+}
+
+.subtext_color {
+	color: var(--subtext_color);
+}
+
+.text_color {
+	color: var(--text_color);
+}
+
+.title_color {
+	color: var(--title_color);
+}
+
+.info_color {
+	color: var(--info_color);
+}
+
+.success_bg {
+	background-color: var(--success_color);
+}
+
+.warning_bg {
+	background-color: var(--warning_color);
+}
+
+.caution_bg {
+	background-color: var(--caution_color);
+}
+
+.subtext_bg {
+	background-color: var(--subtext_color);
+}
+
+.text_bg {
+	background-color: var(--text_color);
+}
+
+.title_bg {
+	background-color: var(--title_color);
+}
+
+.info_bg {
+	background-color: var(--info_color);
+}
