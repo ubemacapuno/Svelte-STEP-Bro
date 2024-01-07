@@ -1,0 +1,116 @@
+:root {
+	/* Font Size */
+	--font_huge: 3rem; /* 48px */
+	--font_xxlarge: 1.875rem; /* 30px */
+	--font_xlarge: 1.5rem; /* 24px */
+	--font_largest: 1.25rem; /* 20px */
+	--font_large: 1.125rem; /* 18px */
+	--font_normal: 1rem; /* 16px */
+	--font_small: 0.875rem; /* 14px */
+	--font_smallest: 0.75rem; /* 12px */
+	--font_xsmall: 0.625rem; /* 10px */
+	/* Font Weight */
+	--bold_weight: 700;
+	--normal_weight: 400;
+	--semi_bold_weight: 500;
+}
+
+body {
+	font-family: 'Overpass', Inter, Avenir, Helvetica, Arial, sans-serif;
+	font-size: var(--font_normal);
+	line-height: 1.25;
+	font-weight: var(--normal_weight);
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+}
+
+.huge_font {
+	font-size: var(--font_huge);
+	line-height: 2.25rem;
+}
+
+.xxlarge_font {
+	font-size: var(--font_xxlarge);
+	line-height: 2.25rem;
+}
+
+.xlarge_font {
+	font-size: var(--font_xlarge);
+	line-height: 1.75rem;
+}
+
+.largest_font {
+	font-size: var(--font_largest);
+	line-height: 1.75rem;
+}
+
+.large_font {
+	font-size: var(--font_large);
+	line-height: 1.75rem;
+}
+
+.normal_font {
+	font-size: var(--font_normal);
+	line-height: 1.25rem;
+}
+
+.small_font {
+	font-size: var(--font_small);
+	line-height: 1.25rem;
+}
+
+.smallest_font {
+	font-size: var(--font_smallest);
+	line-height: 1rem;
+}
+
+.xsmall_font {
+	font-size: var(--font_xsmall);
+	line-height: 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: var(--normal_weight);
+	margin-top: var(--gap);
+	margin-bottom: var(--gap_xsmall);
+}
+
+p {
+	margin-bottom: var(--gap_smallest);
+}
+
+a {
+	font-weight: var(-semi_bold_weight);
+	color: var(--title_color);
+	text-decoration: inherit;
+}
+
+a.link {
+	font-weight: var(-semi_bold_weight);
+	color: var(--primary_color);
+	text-decoration: none;
+}
+
+p a,
+td a {
+	padding-bottom: 2px;
+	text-decoration-line: underline;
+	text-decoration-color: var(--title_color);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+	transition: var(--transition_speed) text-decoration-color color;
+}
+
+p a:hover,
+td a:hover {
+	color: var(--text_color);
+	text-decoration-color: var(--text_color);
+}

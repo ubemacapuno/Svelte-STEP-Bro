@@ -1,0 +1,108 @@
+/** CSS Variables
+  *  @desc: This file contains all the variables used in the CSS files.
+*/
+
+:root {
+	/* Colors */
+	--grey_1: #202020;
+	--grey_2: #1c1c1c;
+	--grey_3: #2f2f2f;
+	--grey_4: #282828;
+	--grey_5: #232323;
+	--grey_6: #3e3e3e;
+	--grey_7: #707070;
+	--grey_8: #aaa;
+	--grey_9: #bbb;
+
+	--grey_a: #ffffff1a;
+	--grey_a_2: #ffffff21;
+
+	--black_a: #0000002c;
+
+	--white: #fff;
+	--white_2: #ededed;
+	--white_3: #f8f9fa;
+
+	--blue: #1e6ec8;
+	--blue_a: #1e6dc85a;
+	--blue_light: #4a90e2;
+	--green: #53a83f;
+	--green_a: #52a83f08;
+	--red: #e54b4b;
+	--red_a: #e54b4b0b;
+	--yellow: #fcb61a;
+	--yellow_a: #fcb41a0b;
+	--orange: #eb5028;
+	--purple: #9d38bd;
+	--pink: #df54ac;
+	--teal: #45a2b0;
+
+	/* Sizing Scales */
+	--base_size: 1rem;
+	--gap_scale: 1.5;
+
+	/* Gap Sizing */
+	--gap: var(--base_size);
+	--gap_0: 0;
+	--gap_normal: var(--gap);
+	--gap_large: calc(var(--gap) * var(--gap_scale));
+	--gap_largest: calc(var(--gap_large) * var(--gap_scale));
+	--gap_small: calc(var(--base_size) / var(--gap_scale));
+	--gap_smallest: calc(var(--gap_small) / var(--gap_scale));
+	--gap_xsmall: calc(var(--gap_smallest) / var(--gap_scale));
+
+	/* Layout */
+	--max_width: 800px;
+	--max_input_width: 600px;
+	--min_width: 320px;
+	--sidebar_width: calc(var(--gap) * 3);
+	--aside_width: var(--min_width);
+	--nav_height: calc(var(--gap) * 3);
+
+	/* Z-Index */
+	--header_level: 10;
+	--modal_level: calc(var(--header_level) * 100);
+	--toast_level: calc(var(--modal_level) + 2);
+	--highest_level: calc(var(--modal_level) * 10);
+
+	/* Misc */
+	--transition_speed: 0.2s;
+	--border_radius: 4px;
+	--input_radius: var(--gap_smallest);
+	--circle_radius: 9999px;
+}
+
+body {
+	/* Color Intentions */
+	--hover_color: var(--grey_a);
+	--sheet_color: var(--grey_1);
+	--bg_color: var(--grey_2);
+	--line_color: var(--grey_3);
+	--modal_color: var(--grey_4);
+	--card_color: var(--grey_5);
+	--input_border_color: var(--grey_6);
+	--button_border_color: var(--grey_a_2);
+	--subtext_color: var(--grey_7);
+	--title_color: var(--white_2);
+	--text_color: var(--grey_9);
+	--placeholder_color: var(--grey_7);
+	--disabled_color: var(--grey_6);
+	--primary_color: var(--blue);
+	--primary_hover_color: var(--blue_light);
+	--primary_active_color: var(--blue_a);
+	--secondary_color: var(--yellow);
+	/* Status */
+	--warning_color: var(--red);
+	--warning_active_color: var(--red_a);
+	--success_color: var(--green);
+	--success_active_color: var(--green_a);
+	--caution_color: var(--yellow);
+	--caution_active_color: var(--yellow_a);
+	--info_color: var(--blue);
+	--info_active_color: var(--blue_a);
+
+	/* Misc */
+	--table_line: inset 0 -1px var(--line_color); /* Table line color hack */
+	--line: 1px solid var(--line_color);
+	--backdrop: hsla(0, 0%, 10%, 70%); /* Modal backdrop color 70% opacity */
+}

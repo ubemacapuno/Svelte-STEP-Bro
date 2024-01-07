@@ -32,17 +32,18 @@
 				75,
 				container.clientWidth / container.clientHeight,
 				0.1,
-				1000
+				100000
 			);
 			renderer = new THREE.WebGLRenderer({ antialias: true });
+			renderer.setClearColor(0x202020);
 			renderer.setSize(container.clientWidth, container.clientHeight);
-			container.appendChild(renderer.domElement);
 
-			renderer.setClearColor(0xd3d3d3);
+			container.appendChild(renderer.domElement);
 
 			// Add ambient light
 			const ambientLight = new THREE.AmbientLight(0xffffff);
 			scene.add(ambientLight);
+
 			// Add directional light
 			const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
 			directionalLight.position.set(5, 5, 5);
@@ -60,7 +61,7 @@
 				renderer.render(scene, camera);
 			}
 			animate();
-			debouncedResize = debounce(onWindowResize, 1800);
+			debouncedResize = debounce(onWindowResize, 1500);
 			window.addEventListener('resize', debouncedResize);
 
 			// Ensure initial sizing is correct
@@ -100,8 +101,7 @@
 				}
 			});
 
-			// Adjust camera position and look at the center of the model
-			camera.position.set(0, 50, 100); // Adjust as needed
+			camera.position.set(0, 50, 100);
 			camera.lookAt(center);
 
 			isModelLoading = false;
@@ -115,8 +115,13 @@
 		}
 	}
 
+	function triggerFileInput() {
+		const fileInput = document.getElementById('fileInput');
+		fileInput?.click();
+	}
 	function clearModel() {
 		if (model && scene) {
+			fileName = '';
 			scene.remove(model);
 			model.traverse((child) => {
 				if (child instanceof THREE.Mesh) {
@@ -155,9 +160,13 @@
 	}
 </script>
 
-<button on:click={loadDemoFile}>Load Demo</button>
-<button on:click={clearModel}>Clear</button>
-
+<div class="tool_container">
+	<button on:click={triggerFileInput}>Load File</button>
+	<button on:click={loadDemoFile}>Demo</button>
+	{#if model}
+		<button on:click={clearModel}>Clear</button>
+	{/if}
+</div>
 <div bind:this={container} class="canvas-container">
 	{#if isModelLoading}
 		<div class="canvas_center">
@@ -166,18 +175,29 @@
 	{/if}
 	{#if !isModelRendered && !isModelLoading}
 		<div class="canvas_center flex">
-			<span> Select a STEP file to view. </span>
-			<input type="file" id="fileInput" accept=".step,.stp" on:change={handleFileChange} />
+			<button on:click={triggerFileInput}>Select a STEP File</button>
+			<input
+				type="file"
+				id="fileInput"
+				accept=".step,.stp"
+				on:change={handleFileChange}
+				class="hidden"
+			/>
+		</div>
+	{/if}
+	{#if fileName}
+		<div class="file_name_container">
+			<span class="file_name">{fileName}</span>
 		</div>
 	{/if}
 </div>
 
 <style>
 	.canvas-container {
-		outline: 1px solid black;
-		width: 100%;
 		height: 90vh;
+		width: 100%;
 		position: relative;
+		background-color: var(--grey_6);
 	}
 	.canvas_center {
 		position: absolute;
@@ -189,5 +209,58 @@
 	.flex {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.tool_container {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+		background-color: var(--grey_6);
+	}
+
+	.file_name_container {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		background-color: var(--backdrop);
+		padding: var(--gap_xsmall);
+	}
+
+	.file_name {
+		color: var(--orange);
+		font-size: 1rem; /* Adjust as needed */
+		margin: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.canvas_center button {
+		margin: 0;
+		color: var(--orange);
+	}
+	button {
+		border-radius: var(--border_radius);
+		color: var(--title_color);
+		padding: var(--gap_xsmall) var(--gap_small);
+		font-weight: var(--semi_bold_weight);
+		display: inline-flex;
+		gap: var(--gap_smallest);
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: var(--transition_speed) ease-in background;
+		line-height: 1.25rem;
+		border: 1px solid transparent;
+	}
+
+	.hidden {
+		display: none;
 	}
 </style>

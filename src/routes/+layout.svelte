@@ -1,14 +1,26 @@
 <script lang="ts">
 	import TopNav from './TopNav.svelte';
+	import '$lib/styles/index.css';
 </script>
 
-<!-- <TopNav />
-<main> -->
-<slot />
-
-<!-- </main> -->
+<div class="site_wrapper">
+	<TopNav />
+	<main>
+		<slot />
+	</main>
+</div>
 
 <style>
+	.site_wrapper {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-rows: auto;
+		grid-template-areas:
+			'sidenav topnav'
+			'sidenav main';
+		height: 100vh;
+	}
+
 	main {
 		grid-area: main;
 		overflow-y: auto;

@@ -1,0 +1,122 @@
+/* Set box-sizing to border-box for all elements */
+html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+/* Reset margins and paddings on most elements */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+li,
+p,
+pre,
+blockquote,
+figure,
+hr,
+button {
+	margin: 0;
+	padding: 0;
+}
+
+/* Remove disc list style */
+ul {
+	list-style: none;
+}
+
+ul.disc {
+	list-style: disc;
+	margin-left: var(--gap);
+}
+
+ul.table_list {
+	display: flex;
+	flex-direction: column;
+}
+
+ul.table_list li {
+	display: flex;
+	flex-direction: column;
+	border-bottom: var(--line);
+	padding: var(--gap_small) 0;
+}
+
+/* Reset forms and buttons */
+input,
+textarea,
+select,
+button {
+	color: inherit;
+	font: inherit;
+	letter-spacing: inherit;
+}
+
+fieldset {
+	border: none;
+	padding: 0;
+}
+
+input {
+	border-radius: var(--input_radius);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+	opacity: 0.5;
+}
+
+button {
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	line-height: 1;
+}
+
+button * {
+	pointer-events: none;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid var(--line_color);
+	margin: var(--gap_small) 0;
+}
+
+/* Easy responsive for media elements */
+embed,
+iframe,
+img,
+object,
+video {
+	display: block;
+	max-width: 100%;
+}
+
+/* Hidden */
+[hidden] {
+	display: none !important;
+}
+
+/* noscript styles */
+noscript {
+	display: block;
+	margin-bottom: 1em;
+	margin-top: 1em;
+}
