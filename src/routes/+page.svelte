@@ -9,7 +9,7 @@
 	import IconButton from '$elements/IconButton.svelte'
 	import Button from '$elements/Button.svelte'
 	import Divider from '$elements/Divider.svelte'
-	import { debounce, onWindowResize } from '$utilities/helpers'
+	import { debounce } from '$utilities/helpers'
 
 	type ModelSource = string | File
 
@@ -70,7 +70,7 @@
 			window.addEventListener('resize', debouncedResize)
 
 			// Ensure initial sizing is correct
-			onWindowResize({ camera, renderer, container })
+			onWindowResize()
 		} else {
 			console.error('Container and/or Window elements are undefined.')
 		}
@@ -161,6 +161,14 @@
 		renderer.clear()
 
 		isModelRendered = false
+	}
+
+	function onWindowResize() {
+		if (camera && renderer && container) {
+			camera.aspect = container.clientWidth / container.clientHeight
+			camera.updateProjectionMatrix()
+			renderer.setSize(container.clientWidth, container.clientHeight)
+		}
 	}
 
 	async function loadDemoFile() {
