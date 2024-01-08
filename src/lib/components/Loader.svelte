@@ -23,9 +23,9 @@
 		);
 		background: conic-gradient(
 			from -90deg at calc(100% - var(--_d)) var(--_d),
-			#ffe2d9 135deg,
-			#da9777 0 270deg,
-			#eb5028 0
+			var(--grey_9) 135deg,
+			var(--orange_light) 0 270deg,
+			var(--orange) 0
 		);
 		animation: l6 2s infinite;
 	}

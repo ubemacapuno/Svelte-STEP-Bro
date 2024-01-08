@@ -18,4 +18,4 @@ export type Theme = 'primary' | 'secondary'
 export type Accent = Status | Text | Theme
 
 // Icons (from Material UI)
-export type IconName = 'engineering' | 'folder_open' | 'cancel'
+export type IconName = 'engineering' | 'folder_open' | 'cancel' | 'restart_alt'

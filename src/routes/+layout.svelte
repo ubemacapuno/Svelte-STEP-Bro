@@ -1,6 +1,6 @@
 <script lang="ts">
-	import TopNav from './TopNav.svelte';
-	import '$lib/styles/index.css';
+	import TopNav from './TopNav.svelte'
+	import '$lib/styles/index.css'
 </script>
 
 <div class="site_wrapper">

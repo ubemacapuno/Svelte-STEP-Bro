@@ -33,6 +33,8 @@
 	--yellow: #fcb61a;
 	--yellow_a: #fcb41a0b;
 	--orange: #eb5028;
+	--orange_a: #eb50284a;
+	--orange_light: #f27249;
 	--purple: #9d38bd;
 	--pink: #df54ac;
 	--teal: #45a2b0;
@@ -87,9 +89,9 @@ body {
 	--text_color: var(--grey_9);
 	--placeholder_color: var(--grey_7);
 	--disabled_color: var(--grey_6);
-	--primary_color: var(--blue);
-	--primary_hover_color: var(--blue_light);
-	--primary_active_color: var(--blue_a);
+	--primary_color: var(--orange);
+	--primary_hover_color: var(--orange_light);
+	--primary_active_color: var(--orange_a);
 	--secondary_color: var(--yellow);
 	/* Status */
 	--warning_color: var(--red);

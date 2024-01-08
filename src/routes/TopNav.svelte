@@ -8,7 +8,7 @@
 	}
 	.nav_wrapper {
 		height: var(--nav_height);
-		background-color: var(--sheet_color);
+		background-color: var(--bg_color);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;

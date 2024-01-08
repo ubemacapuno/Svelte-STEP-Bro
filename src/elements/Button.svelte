@@ -60,7 +60,7 @@
 			border: 1px solid var(--primary_color);
 			background-color: var(--primary_color);
 			&:hover {
-				background-color: var(--primary_color);
+				background-color: var(--primary_hover_color);
 			}
 		}
 

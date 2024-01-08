@@ -7,9 +7,11 @@
 	import MenuItem from '$lib/components/MenuItem.svelte'
 	import Tooltip from '$lib/components/Tooltip.svelte'
 	import IconButton from '$elements/IconButton.svelte'
+	import Button from '$elements/Button.svelte'
+	import Divider from '$elements/Divider.svelte'
+	import { debounce, onWindowResize } from '$utilities/helpers'
 
 	type ModelSource = string | File
-	type CallbackFunction = (...args: any[]) => any
 
 	// THREEjs Vars:
 	let container: HTMLElement | null = null
@@ -21,7 +23,7 @@
 
 	let isModelLoading = false
 	let isModelRendered: boolean = false
-	let fileName = ''
+	let fileName: string | null = null
 	let debouncedResize: (...args: any[]) => void
 
 	const demoUrl = '/demo.stp'
@@ -64,11 +66,11 @@
 				renderer.render(scene, camera)
 			}
 			animate()
-			debouncedResize = debounce(onWindowResize, 1500)
+			debouncedResize = debounce(onWindowResize, 1800) // Debounce the resize to save on performance
 			window.addEventListener('resize', debouncedResize)
 
 			// Ensure initial sizing is correct
-			onWindowResize()
+			onWindowResize({ camera, renderer, container })
 		} else {
 			console.error('Container and/or Window elements are undefined.')
 		}
@@ -105,7 +107,8 @@
 			})
 
 			camera.position.set(0, 50, 100)
-			camera.lookAt(center)
+			camera.lookAt(new THREE.Vector3(0, 0, 0))
+			camera.updateProjectionMatrix()
 
 			isModelLoading = false
 		}
@@ -122,9 +125,16 @@
 		const fileInput = document.getElementById('fileInput')
 		fileInput?.click()
 	}
+
+	function resetCamera() {
+		camera.position.set(0, 50, 100)
+		camera.lookAt(new THREE.Vector3(0, 0, 0))
+		camera.updateProjectionMatrix()
+	}
+
 	function clearModel() {
 		if (model && scene) {
-			fileName = ''
+			// Remove and dispose of the model
 			scene.remove(model)
 			model.traverse((child) => {
 				if (child instanceof THREE.Mesh) {
@@ -136,46 +146,52 @@
 					}
 				}
 			})
-			isModelRendered = false
+			fileName = null
+			model = null
 		}
-		model = null
-	}
+		// Reset the camera
+		resetCamera()
 
-	function debounce(func: CallbackFunction, timeout = 300) {
-		let timer: number | undefined
-		return (...args: any[]) => {
-			clearTimeout(timer)
-			timer = setTimeout(() => {
-				func.apply(this, args)
-			}, timeout)
+		// Reset controls
+		if (controls) {
+			controls.reset()
 		}
-	}
 
-	function onWindowResize() {
-		if (camera && renderer && container) {
-			camera.aspect = container.clientWidth / container.clientHeight
-			camera.updateProjectionMatrix()
-			renderer.setSize(container.clientWidth, container.clientHeight)
-		}
+		// clear out the renderer
+		renderer.clear()
+
+		isModelRendered = false
 	}
 
 	async function loadDemoFile() {
-		await loadAndHandleModel(demoUrl) // Pass the URL to the new function
+		await loadAndHandleModel(demoUrl) // Pass the URL
 	}
 </script>
 
+<!-- Hidden file input element -->
+<input type="file" id="fileInput" accept=".step,.stp" on:change={handleFileChange} class="hidden" />
+
 <div class="tool_container">
-	<Tooltip content="Select a File" placement="bottom">
+	<Tooltip content="Select a STEP File" placement="bottom">
 		<MenuItem iconName="folder_open" on:click={triggerFileInput} />
 	</Tooltip>
-	<Tooltip content="Load a Demo File" placement="bottom">
+	<Tooltip content="Load a Demo STEP File" placement="bottom">
 		<MenuItem iconName="engineering" on:click={loadDemoFile} />
 	</Tooltip>
-	{#if model}
-		<Tooltip content="Clear Model" placement="bottom">
-			<IconButton name="cancel" accent="warning" on:click={clearModel} />
-		</Tooltip>
-	{/if}
+
+	<Divider />
+
+	<Tooltip content="Reset Camera" placement="bottom">
+		<IconButton disabled={!model} accent="subtext" name="restart_alt" on:click={resetCamera} />
+	</Tooltip>
+	<Tooltip content="Clear Model" placement="bottom">
+		<IconButton
+			disabled={!model}
+			name="cancel"
+			accent={!model ? undefined : 'warning'}
+			on:click={clearModel}
+		/>
+	</Tooltip>
 </div>
 
 <div bind:this={container} class="canvas-container">
@@ -186,17 +202,10 @@
 	{/if}
 	{#if !isModelRendered && !isModelLoading}
 		<div class="canvas_center flex">
-			<button on:click={triggerFileInput}>Select a STEP File</button>
-			<input
-				type="file"
-				id="fileInput"
-				accept=".step,.stp"
-				on:change={handleFileChange}
-				class="hidden"
-			/>
+			<Button on:click={triggerFileInput}>Select a STEP File</Button>
 		</div>
 	{/if}
-	{#if fileName}
+	{#if fileName && isModelRendered}
 		<div class="file_name_container">
 			<span class="file_name">{fileName}</span>
 		</div>
@@ -209,10 +218,10 @@
 		flex-direction: row;
 		justify-content: flex-start;
 		align-items: center;
-		padding: 0 var(--gap_smallest);
+		padding: var(--gap_smallest);
 		gap: var(--gap_smallest);
 		width: 100%;
-		background-color: var(--grey_5);
+		background-color: var(--sheet_color);
 	}
 	.canvas-container {
 		height: 90vh;
@@ -251,25 +260,6 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-	}
-
-	.canvas_center button {
-		margin: 0;
-		color: var(--orange);
-	}
-	button {
-		border-radius: var(--border_radius);
-		color: var(--title_color);
-		padding: var(--gap_xsmall) var(--gap_small);
-		font-weight: var(--semi_bold_weight);
-		display: inline-flex;
-		gap: var(--gap_smallest);
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: var(--transition_speed) ease-in background;
-		line-height: 1.25rem;
-		border: 1px solid transparent;
 	}
 
 	.hidden {
