@@ -34,7 +34,7 @@
 		if (container && typeof window !== 'undefined') {
 			scene = new THREE.Scene()
 			camera = new THREE.PerspectiveCamera(
-				75,
+				45,
 				container.clientWidth / container.clientHeight,
 				0.1,
 				100000
