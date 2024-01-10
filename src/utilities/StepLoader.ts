@@ -82,6 +82,5 @@ export async function LoadStep(input: string | File) {
 		targetObject.add(mesh)
 	}
 
-	console.log('TARGET OBJECT: ', targetObject)
 	return targetObject
 }

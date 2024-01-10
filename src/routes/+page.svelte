@@ -92,6 +92,8 @@
 		if (model) {
 			isModelRendered = true
 			scene.add(model)
+
+			// Calculate the bounding box to adjust the camera
 			const bbox = new THREE.Box3().setFromObject(model)
 			const center = bbox.getCenter(new THREE.Vector3())
 			model.position.sub(center) // Center the model
@@ -106,8 +108,18 @@
 				}
 			})
 
-			camera.position.set(0, 50, 100)
-			camera.lookAt(new THREE.Vector3(0, 0, 0))
+			// Adjust the camera based on the model's bounding box
+			const size = bbox.getSize(new THREE.Vector3())
+			const maxDim = Math.max(size.x, size.y, size.z)
+			const fov = camera.fov * (Math.PI / 180)
+			let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2))
+
+			cameraZ *= 1.2 // Adjust this factor as needed to ensure the model is fully visible
+
+			// Position the camera at a 45-degree angle along Y and X axes
+			camera.position.set(cameraZ, cameraZ, cameraZ)
+
+			camera.lookAt(center)
 			camera.updateProjectionMatrix()
 
 			isModelLoading = false
@@ -127,9 +139,24 @@
 	}
 
 	function resetCamera() {
-		camera.position.set(0, 50, 100)
-		camera.lookAt(new THREE.Vector3(0, 0, 0))
-		camera.updateProjectionMatrix()
+		if (model) {
+			const bbox = new THREE.Box3().setFromObject(model)
+			const center = bbox.getCenter(new THREE.Vector3())
+
+			// Adjust the camera based on the model's bounding box
+			const size = bbox.getSize(new THREE.Vector3())
+			const maxDim = Math.max(size.x, size.y, size.z)
+			const fov = camera.fov * (Math.PI / 180)
+			let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2))
+
+			cameraZ *= 1.2 // Adjust this factor as needed to ensure the model is fully visible
+
+			// Position the camera at a 45-degree angle along Y and X axes
+			camera.position.set(cameraZ, cameraZ, cameraZ)
+
+			camera.lookAt(center)
+			camera.updateProjectionMatrix()
+		}
 	}
 
 	function clearModel() {
