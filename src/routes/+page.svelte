@@ -36,7 +36,7 @@
 			camera = new THREE.PerspectiveCamera(
 				45,
 				container.clientWidth / container.clientHeight,
-				0.1,
+				10,
 				100000
 			)
 			renderer = new THREE.WebGLRenderer({ antialias: true })
