@@ -1,10 +1,12 @@
 # Svelte STEP Bro
 
-Svelte STEP Bro is a SvelteKit application designed to render STEP (Standard for the Exchange of Product model data) files directly in the browser. Built using SvelteKit and integrating Three.js along with occt-import-js, it offers a seamless solution for engineers, machinists, and professionals who frequently work with CAD files. Recognizing the high costs associated with CAD software licenses, Svelte STEP Bro is developed as a free alternative, facilitating easy viewing and sharing of 3D models. This project also serves as a deep dive into web-based 3D programming, leveraging modern web technologies to bring complex 3D CAD data to the web platform.
+[Svelte STEP Bro](https://stepbro.vercel.app/) is a SvelteKit application designed to render STEP (Standard for the Exchange of Product model data) files directly in the browser. Built using SvelteKit and integrating Three.js along with occt-import-js, it offers a seamless solution for engineers, machinists, and professionals who frequently work with CAD files. Recognizing the high costs associated with CAD software licenses, Svelte STEP Bro is developed as a free alternative, facilitating easy viewing and sharing of 3D models.
+
+This project also serves as a deep dive into web-based 3D programming, leveraging modern web technologies to bring complex 3D CAD data to the web platform, using the fun and modern [SvelteKit meta-framework](https://kit.svelte.dev/docs/introduction#what-is-sveltekit).
 
 ## Getting Started
 
-View the deployed <a href="https://stepbro.vercel.app/">DEMO here.</a> To get Svelte STEP Bro running on your local environment, follow these instructions.
+View the deployed <a href="https://stepbro.vercel.app/">DEMO here</a>. To get Svelte STEP Bro running on your local environment, follow the instructions below.
 
 ### Prerequisites
 
@@ -17,11 +19,11 @@ To set up your development environment, follow these steps:
 1. Clone the repository to your local machine:
 
 ```
-git clone https://github.com/yourusername/svelte-step-bro.git
+git clone https://github.com/ubemacapuno/Svelte-STEP-Bro.git
 cd svelte-step-bro
 ```
 
-2. Install the dependencies:
+2. Install the dependencies (using pnpm for example):
 
 ```
 pnpm i
@@ -55,9 +57,9 @@ To deploy this on a live system, you can use Vercel, Netlify, or any other stati
 
 ## Optimizations:
 
-- Add more features to the 3D model viewer; it is very barebones right now.
-- Add instructions on how to use to current and future features
-- Add other file formats
+- Add other common CAD file formats.
+- Add more tools to the 3D model viewer.
+- Add instructions on how to use current and future features.
 
 ## License
 
