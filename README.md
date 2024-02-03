@@ -6,7 +6,7 @@ This project also serves as a deep dive into web-based 3D programming, leveragin
 
  <tr>
     <td width="30%"  style="align:center;" valign="top">
-            <img src="[https://github.com/ubemacapuno/images-for-github-readme/blob/main/2023-01-23%2020-02-22_2.gif?raw=true](https://github.com/ubemacapuno/images-for-github-readme/blob/main/Svelte%20STEP%20Image.jpg?raw=true)" width="30%"  alt="Svelte STEP Bro Raspberry Pi 5 Demo"/>
+            <img src="https://github.com/ubemacapuno/images-for-github-readme/blob/main/Svelte%20STEP%20Image.jpg?raw=true" width="30%"  alt="Svelte STEP Bro Raspberry Pi 5 Demo"/>
     </td>
   </tr>
 
