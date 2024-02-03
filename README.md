@@ -4,6 +4,12 @@
 
 This project also serves as a deep dive into web-based 3D programming, leveraging modern web technologies to bring complex 3D CAD data to the web platform, using the fun and modern [SvelteKit meta-framework](https://kit.svelte.dev/docs/introduction#what-is-sveltekit).
 
+ <tr>
+    <td width="30%"  style="align:center;" valign="top">
+            <img src="[https://github.com/ubemacapuno/images-for-github-readme/blob/main/2023-01-23%2020-02-22_2.gif?raw=true](https://github.com/ubemacapuno/images-for-github-readme/blob/main/Svelte%20STEP%20Image.jpg?raw=true)" width="30%"  alt="CAPA Tracker demo animation."/>
+    </td>
+  </tr>
+
 ## Getting Started
 
 View the deployed <a href="https://stepbro.vercel.app/">DEMO here</a>. To get Svelte STEP Bro running on your local environment, follow the instructions below.
@@ -39,7 +45,7 @@ pnpm dev
 
 ## Deployment
 
-To deploy this on a live system, you can use Vercel, Netlify, or any other static site hosting service that supports SvelteKit. The app should be able to run wherever JavaScript can run; please refer to the <a href="https://kit.svelte.dev/docs/adapters">SvelteKit docs for adapters and other deployment information.</a>
+To deploy this on a live system, you can use Vercel, Netlify, or any other static site hosting service that supports SvelteKit. The app should be able to run wherever JavaScript can run; please refer to the <a href="https://kit.svelte.dev/docs/adapters">SvelteKit docs for adapters and other deployment information</a>.
 
 ## Built With
 
