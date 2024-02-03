@@ -5,8 +5,8 @@
 This project also serves as a deep dive into web-based 3D programming, leveraging modern web technologies to bring complex 3D CAD data to the web platform, using the fun and modern [SvelteKit meta-framework](https://kit.svelte.dev/docs/introduction#what-is-sveltekit).
 
  <tr>
-    <td width="30%"  style="align:center;" valign="top">
-            <img src="https://github.com/ubemacapuno/images-for-github-readme/blob/main/Svelte%20STEP%20Image.jpg?raw=true" width="30%"  alt="Svelte STEP Bro Raspberry Pi 5 Demo"/>
+    <td width="60%"  style="align:center;" valign="top">
+            <img src="https://github.com/ubemacapuno/images-for-github-readme/blob/main/Svelte%20STEP%20Image.jpg?raw=true" width="60%"  alt="Svelte STEP Bro Raspberry Pi 5 Demo"/>
     </td>
   </tr>
 
