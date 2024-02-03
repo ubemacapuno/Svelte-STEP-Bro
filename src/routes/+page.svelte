@@ -203,6 +203,9 @@
 	async function loadDemoFile() {
 		await loadAndHandleModel(demoUrl) // Pass the URL
 	}
+
+	$: console.log('isModelRendered', isModelRendered)
+	$: console.log('fileName', fileName)
 </script>
 
 <!-- Hidden file input element -->
@@ -213,7 +216,7 @@
 		<MenuItem iconName="folder_open" on:click={triggerFileInput} />
 	</Tooltip>
 	<Tooltip content="Load a Demo STEP File" placement="bottom">
-		<MenuItem iconName="engineering" on:click={loadDemoFile} />
+		<MenuItem iconName="play_arrow" on:click={loadDemoFile} />
 	</Tooltip>
 
 	<Divider />
@@ -259,11 +262,11 @@
 		gap: var(--gap_smallest);
 		width: 100%;
 		background-color: var(--sheet_color);
+		height: var(--nav_height);
 	}
 
 	.canvas_container {
-		height: calc(100vh - var(--nav_height));
-		height: 90vh;
+		height: calc(100vh - var(--nav_height) - var(--nav_height));
 		width: 100%;
 		position: relative;
 		background-color: var(--grey_6);
@@ -284,7 +287,7 @@
 
 	.file_name_container {
 		position: absolute;
-		bottom: 0;
+		top: 0;
 		left: 50%;
 		transform: translateX(-50%);
 		display: flex;
@@ -296,8 +299,9 @@
 
 	.file_name {
 		color: var(--orange);
-		font-size: 1rem; /* Adjust as needed */
-		margin: 0;
+		font-size: 1rem;
+		display: inline-block;
+		max-width: 800px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;

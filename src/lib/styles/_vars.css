@@ -106,5 +106,5 @@ body {
 	/* Misc */
 	--table_line: inset 0 -1px var(--line_color); /* Table line color hack */
 	--line: 1px solid var(--line_color);
-	--backdrop: hsla(0, 0%, 10%, 70%); /* Modal backdrop color 70% opacity */
+	--backdrop: hsla(0, 0%, 10%, 50%); /* Modal backdrop color 50% opacity */
 }

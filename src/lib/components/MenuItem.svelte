@@ -9,7 +9,6 @@
 	export let iconAccent: Accent | undefined = undefined
 	export let description: string = ''
 	export let href: string | null = null
-	export let src: string | null = null
 </script>
 
 <svelte:element

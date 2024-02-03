@@ -18,7 +18,6 @@
 		grid-template-areas:
 			'sidenav topnav'
 			'sidenav main';
-		height: 100vh;
 	}
 
 	main {
