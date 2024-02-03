@@ -139,23 +139,25 @@
 	}
 
 	function resetCamera() {
-		if (model) {
-			const bbox = new THREE.Box3().setFromObject(model)
-			const center = bbox.getCenter(new THREE.Vector3())
+		if (!model) return
+		// Calculate the bounding box to adjust the camera
+		const bbox = new THREE.Box3().setFromObject(model)
+		const center = bbox.getCenter(new THREE.Vector3())
+		const size = bbox.getSize(new THREE.Vector3())
+		const maxDim = Math.max(size.x, size.y, size.z)
+		const fov = camera.fov * (Math.PI / 180)
+		let cameraZ = maxDim / 2 / Math.tan(fov / 2)
 
-			// Adjust the camera based on the model's bounding box
-			const size = bbox.getSize(new THREE.Vector3())
-			const maxDim = Math.max(size.x, size.y, size.z)
-			const fov = camera.fov * (Math.PI / 180)
-			let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2))
+		cameraZ *= 1.2
+		// Update camera position
+		camera.position.set(cameraZ, cameraZ, cameraZ)
+		camera.lookAt(center)
+		camera.updateProjectionMatrix()
 
-			cameraZ *= 1.2 // Adjust this factor as needed to ensure the model is fully visible
-
-			// Position the camera at a 45-degree angle along Y and X axes
-			camera.position.set(cameraZ, cameraZ, cameraZ)
-
-			camera.lookAt(center)
-			camera.updateProjectionMatrix()
+		// Reset OrbitControls to view centered model
+		if (controls) {
+			controls.target.copy(center)
+			controls.update()
 		}
 	}
 
@@ -229,7 +231,7 @@
 	</Tooltip>
 </div>
 
-<div bind:this={container} class="canvas-container">
+<div bind:this={container} class="canvas_container">
 	{#if isModelLoading}
 		<div class="canvas_center">
 			<Loader />
@@ -258,12 +260,16 @@
 		width: 100%;
 		background-color: var(--sheet_color);
 	}
-	.canvas-container {
+
+	.canvas_container {
+		height: calc(100vh - var(--nav_height));
 		height: 90vh;
 		width: 100%;
 		position: relative;
 		background-color: var(--grey_6);
+		overflow: hidden;
 	}
+
 	.canvas_center {
 		position: absolute;
 		top: 50%;
