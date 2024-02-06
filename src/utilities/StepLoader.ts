@@ -67,7 +67,10 @@ export async function LoadStep(input: string | File) {
 			)
 		}
 
-		const index = Uint16Array.from(resultMesh.index.array)
+		const index =
+			resultMesh.index.array.length > 65535
+				? Uint32Array.from(resultMesh.index.array)
+				: Uint16Array.from(resultMesh.index.array)
 		geometry.setIndex(new THREE.BufferAttribute(index, 1))
 
 		let material: THREE.Material
