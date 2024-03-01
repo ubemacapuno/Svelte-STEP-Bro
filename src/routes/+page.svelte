@@ -71,6 +71,7 @@
 
 			// Ensure initial sizing is correct
 			onWindowResize()
+			loadDemoFile()
 		} else {
 			console.error('Container and/or Window elements are undefined.')
 		}
@@ -203,9 +204,6 @@
 	async function loadDemoFile() {
 		await loadAndHandleModel(demoUrl) // Pass the URL
 	}
-
-	$: console.log('isModelRendered', isModelRendered)
-	$: console.log('fileName', fileName)
 </script>
 
 <!-- Hidden file input element -->
