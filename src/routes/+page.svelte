@@ -13,6 +13,12 @@
 
 	type ModelSource = string | File
 
+	const demoUrl = '/demo.stp'
+
+	// STEP Colors
+	const lightModeColor = 0xd9e7fc
+	const darkModeColor = 0x232323
+
 	// THREEjs Vars:
 	let container: HTMLElement | null = null
 	let model: THREE.Object3D | null
@@ -25,8 +31,7 @@
 	let isModelRendered: boolean = false
 	let fileName: string | null = null
 	let debouncedResize: (...args: any[]) => void
-
-	const demoUrl = '/demo.stp'
+	let currentBackgroundColor = darkModeColor
 
 	onMount(() => {
 		// Initialize scene, camera, and renderer,
@@ -40,7 +45,7 @@
 				100000
 			)
 			renderer = new THREE.WebGLRenderer({ antialias: true })
-			renderer.setClearColor(0x232323)
+			renderer.setClearColor(currentBackgroundColor)
 			renderer.setSize(container.clientWidth, container.clientHeight)
 
 			container.appendChild(renderer.domElement)
@@ -201,6 +206,19 @@
 		}
 	}
 
+	// Function to toggle light/dark mode
+	function toggleLightDarkMode() {
+		// Toggle between light and dark mode colors
+		currentBackgroundColor =
+			currentBackgroundColor === lightModeColor ? darkModeColor : lightModeColor
+
+		// Apply the new color
+		if (renderer) {
+			renderer.setClearColor(currentBackgroundColor)
+			renderer.render(scene, camera) // Re-render the scene with the new background color
+		}
+	}
+
 	async function loadDemoFile() {
 		await loadAndHandleModel(demoUrl) // Pass the URL
 	}
@@ -219,17 +237,29 @@
 
 	<Divider />
 
-	<Tooltip content="Reset Camera" placement="bottom">
-		<IconButton disabled={!model} accent="subtext" name="restart_alt" on:click={resetCamera} />
-	</Tooltip>
-	<Tooltip content="Clear Model" placement="bottom">
-		<IconButton
-			disabled={!model}
-			name="cancel"
-			accent={!model ? undefined : 'warning'}
-			on:click={clearModel}
-		/>
-	</Tooltip>
+	<IconButton
+		tooltipText="Reset Camera"
+		disabled={!model}
+		accent="subtext"
+		name="restart_alt"
+		on:click={resetCamera}
+	/>
+	<IconButton
+		tooltipText="Clear Model"
+		disabled={!model}
+		name="cancel"
+		accent={!model ? undefined : 'warning'}
+		on:click={clearModel}
+	/>
+	<IconButton
+		tooltipText={currentBackgroundColor === lightModeColor
+			? 'Toggle Dark Mode'
+			: 'Toggle Light Mode'}
+		disabled={!model}
+		accent="subtext"
+		name={currentBackgroundColor === lightModeColor ? 'dark_mode' : 'light_mode'}
+		on:click={toggleLightDarkMode}
+	/>
 </div>
 
 <div bind:this={container} class="canvas_container">
