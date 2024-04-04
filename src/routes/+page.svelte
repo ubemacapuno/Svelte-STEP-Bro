@@ -257,7 +257,7 @@
 			: 'Toggle Light Mode'}
 		disabled={!model}
 		accent="subtext"
-		name={currentBackgroundColor === lightModeColor ? 'dark_mode' : 'light_mode'}
+		name={currentBackgroundColor === lightModeColor ? 'light_mode' : 'dark_mode'}
 		on:click={toggleLightDarkMode}
 	/>
 </div>
