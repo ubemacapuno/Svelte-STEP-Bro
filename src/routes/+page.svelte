@@ -10,6 +10,7 @@
 	import Button from '$elements/Button.svelte'
 	import Divider from '$elements/Divider.svelte'
 	import { debounce } from '$utilities/helpers'
+	import StepEmbed from '$lib/components/StepEmbed.svelte'
 
 	type ModelSource = string | File
 
@@ -262,7 +263,7 @@
 	/>
 </div>
 
-<div bind:this={container} class="canvas_container">
+<!-- <div bind:this={container} class="canvas_container">
 	{#if isModelLoading}
 		<div class="canvas_center">
 			<Loader />
@@ -278,7 +279,8 @@
 			<span class="file_name">{fileName}</span>
 		</div>
 	{/if}
-</div>
+</div> -->
+<StepEmbed />
 
 <style lang="postcss">
 	.tool_container {
