@@ -10,8 +10,7 @@
 	} from '../../utilities/step-helpers'
 	import Button from '$elements/Button.svelte'
 	import Loader from './Loader.svelte'
-
-	export let displayName = ''
+	import IconButton from '$elements/IconButton.svelte'
 
 	// STEP Colors
 	const edgeColor = 0x333333
@@ -27,6 +26,7 @@
 	let volume = ''
 	let boundingBoxVolume = ''
 	let boundingBoxDimensions = ''
+	let isUIVisible = true
 
 	// Three.js vars
 	let model: THREE.Object3D<THREE.Object3DEventMap> | null
@@ -42,6 +42,10 @@
 	let modelFileName = ''
 	let isModelRendered = false
 	const fileTypes = '.stp, .step'
+
+	function toggleInfoVisibility() {
+		isUIVisible = !isUIVisible
+	}
 
 	function adjustCamera(boundingBox: THREE.Box3) {
 		const size = boundingBox.getSize(new THREE.Vector3())
@@ -223,9 +227,8 @@
 			container.removeChild(renderer.domElement)
 
 			model = null
-			// toast.success('Model Removed', {
-			// 	description: 'STEP model has been removed successfully.'
-			// })
+			modelFileName = ''
+			isUIVisible = true
 		}
 		if (controls) {
 			controls.dispose()
@@ -260,20 +263,14 @@
 	}
 </script>
 
-<div
-	class="h-[80vh] w-full relative my-2"
-	class:border-2={!isModelRendered}
-	class:border-dashed={!isModelRendered}
-	class:border-orange-400={!isModelRendered}
-	bind:this={container}
->
+<div class="canvas_container" bind:this={container}>
 	{#if isModelLoading}
-		<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+		<div class="canvas_center flex">
 			<Loader />
 		</div>
 	{/if}
 	{#if !isModelRendered && !isModelLoading}
-		<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+		<div class="canvas_center flex">
 			<Button
 				on:click={() => {
 					modelFileInput.click()
@@ -284,29 +281,33 @@
 			</Button>
 		</div>
 	{:else}
-		<div class="absolute top-1 right-1">
+		<div class="control_buttons">
+			<IconButton
+				name={isUIVisible ? 'visibility' : 'visibility_off'}
+				on:click={toggleInfoVisibility}
+				tooltipText={isUIVisible ? 'Hide info' : 'Show info'}
+			>
+				{isUIVisible ? 'Hide' : 'Show'}
+			</IconButton>
 			<Button outline on:click={removeModel}>Clear</Button>
 		</div>
 	{/if}
-	{#if volume && surfaceArea && boundingBoxVolume && boundingBoxDimensions}
-		<div class="absolute bottom-1 left-1">
-			<div class="bg-black bg-opacity-80 p-2 m-2 rounded-lg text-white">
-				<p class="text-orange-400">Surface Area:</p>
+	{#if modelFileName && isUIVisible}
+		<p class="model_file_name">{modelFileName}</p>
+	{/if}
+	{#if volume && surfaceArea && boundingBoxVolume && boundingBoxDimensions && isUIVisible}
+		<div class="info_box">
+			<div class="info_content">
+				<p class="highlight">Surface Area:</p>
 				{numberWithCommas(surfaceArea)} mm²
-				<p class="text-orange-400">Actual Part Volume:</p>
+				<p class="highlight">Actual Part Volume:</p>
 				{numberWithCommas(volume)} mm³
-				<p class="text-orange-400">Bounding Box Volume:</p>
+				<p class="highlight">Bounding Box Volume:</p>
 				{boundingBoxDimensions} = {numberWithCommas(boundingBoxVolume)} mm³
 			</div>
 		</div>
 	{/if}
-	{#if displayName}
-		<div class="absolute top-1/2 right-1/2 transform -translate-x-1/2 -translate-y-1/2 border-">
-			<p>
-				{displayName}
-			</p>
-		</div>
-	{/if}
+
 	<input
 		type="file"
 		accept={fileTypes}
@@ -315,3 +316,65 @@
 		hidden
 	/>
 </div>
+
+<style>
+	.canvas_container {
+		height: 85vh;
+		width: 100%;
+		position: relative;
+		margin: 0.5rem 0;
+	}
+
+	.canvas_center {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.flex {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 100%;
+	}
+
+	.control_buttons {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		display: flex;
+		align-items: center;
+		gap: var(--gap_smallest);
+	}
+
+	.model_file_name {
+		position: absolute;
+		top: 1rem;
+		left: 1rem;
+		background-color: rgba(28, 28, 28, 0.8);
+		padding: 0.5rem;
+		margin: 0.5rem;
+		border-radius: 0.5rem;
+		color: var(--primary_color);
+	}
+
+	.info_box {
+		position: absolute;
+		bottom: 1rem;
+		left: 1rem;
+	}
+
+	.info_content {
+		background-color: rgba(28, 28, 28, 0.8);
+		padding: 0.5rem;
+		margin: 0.5rem;
+		border-radius: 0.5rem;
+		color: var(--text_color);
+	}
+
+	.highlight {
+		color: var(--primary_color);
+	}
+</style>

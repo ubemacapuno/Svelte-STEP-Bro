@@ -25,3 +25,5 @@ export type IconName =
 	| 'restart_alt'
 	| 'dark_mode'
 	| 'light_mode'
+	| 'visibility' // eye
+	| 'visibility_off'

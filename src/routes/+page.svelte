@@ -228,7 +228,7 @@
 <!-- Hidden file input element -->
 <input type="file" id="fileInput" accept=".step,.stp" on:change={handleFileChange} class="hidden" />
 
-<div class="tool_container">
+<!-- <div class="tool_container">
 	<Tooltip content="Select a STEP File" placement="bottom">
 		<MenuItem iconName="folder_open" on:click={triggerFileInput} />
 	</Tooltip>
@@ -261,25 +261,8 @@
 		name={currentBackgroundColor === lightModeColor ? 'light_mode' : 'dark_mode'}
 		on:click={toggleLightDarkMode}
 	/>
-</div>
-
-<!-- <div bind:this={container} class="canvas_container">
-	{#if isModelLoading}
-		<div class="canvas_center">
-			<Loader />
-		</div>
-	{/if}
-	{#if !isModelRendered && !isModelLoading}
-		<div class="canvas_center flex">
-			<Button on:click={triggerFileInput}>Select a STEP File</Button>
-		</div>
-	{/if}
-	{#if fileName && isModelRendered}
-		<div class="file_name_container">
-			<span class="file_name">{fileName}</span>
-		</div>
-	{/if}
 </div> -->
+
 <StepEmbed />
 
 <style lang="postcss">
@@ -295,24 +278,31 @@
 		height: var(--nav_height);
 	}
 
+	.canvas_center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 100%;
+	}
+
+	.flex {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.hidden {
+		display: none;
+	}
+
 	.canvas_container {
 		height: calc(100vh - var(--nav_height) - var(--nav_height));
 		width: 100%;
 		position: relative;
 		background-color: var(--grey_6);
 		overflow: hidden;
-	}
-
-	.canvas_center {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	.flex {
-		display: flex;
-		flex-direction: column;
 	}
 
 	.file_name_container {
@@ -335,9 +325,5 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-	}
-
-	.hidden {
-		display: none;
 	}
 </style>
