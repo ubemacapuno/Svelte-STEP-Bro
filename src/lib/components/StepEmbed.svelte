@@ -12,6 +12,8 @@
 	import Loader from './Loader.svelte'
 	import IconButton from '$elements/IconButton.svelte'
 
+	const demoFile = './demo.stp'
+
 	// STEP Colors
 	const edgeColor = 0x333333
 	const lightingColor = 0xffffff
@@ -236,6 +238,7 @@
 		if (renderer) {
 			renderer.dispose()
 		}
+		src = ''
 		volume = ''
 		surfaceArea = ''
 		boundingBoxVolume = ''
@@ -275,10 +278,16 @@
 				on:click={() => {
 					modelFileInput.click()
 				}}
-				outline
 			>
 				Import STEP
 			</Button>
+			<Button
+				outline
+				on:click={() => {
+					src = demoFile
+					modelFileName = 'Demo STEP Model'
+				}}>Load Demo</Button
+			>
 		</div>
 	{:else}
 		<div class="control_buttons">
@@ -334,6 +343,8 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		flex-direction: column;
+		gap: var(--gap_small);
 		height: 100%;
 		width: 100%;
 	}
