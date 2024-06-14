@@ -353,7 +353,7 @@
 		position: absolute;
 		top: 1rem;
 		left: 1rem;
-		background-color: rgba(28, 28, 28, 0.8);
+		background-color: var(--transparent_backdrop);
 		padding: 0.5rem;
 		margin: 0.5rem;
 		border-radius: 0.5rem;
@@ -367,7 +367,7 @@
 	}
 
 	.info_content {
-		background-color: rgba(28, 28, 28, 0.8);
+		background-color: var(--transparent_backdrop);
 		padding: 0.5rem;
 		margin: 0.5rem;
 		border-radius: 0.5rem;
