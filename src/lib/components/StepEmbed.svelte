@@ -286,9 +286,7 @@
 				name={isUIVisible ? 'visibility' : 'visibility_off'}
 				on:click={toggleInfoVisibility}
 				tooltipText={isUIVisible ? 'Hide info' : 'Show info'}
-			>
-				{isUIVisible ? 'Hide' : 'Show'}
-			</IconButton>
+			/>
 			<Button outline on:click={removeModel}>Clear</Button>
 		</div>
 	{/if}
