@@ -103,13 +103,13 @@
 	// 	}
 	// }
 
-	// function resetCamera() {
-	// 	if (!model || !camera) return
-	// 	const boundingBox = new THREE.Box3().setFromObject(model)
-	// 	adjustCamera(boundingBox)
-	// 	controls?.target.copy(boundingBox.getCenter(new THREE.Vector3())) // Center the model
-	// 	controls?.update()
-	// }
+	function resetCamera() {
+		if (!model || !camera) return
+		const boundingBox = new THREE.Box3().setFromObject(model)
+		adjustCamera(boundingBox)
+		controls?.target.copy(boundingBox.getCenter(new THREE.Vector3())) // Center the model
+		controls?.update()
+	}
 
 	function debounce(func: (...args: any[]) => void, timeout = 300) {
 		let timer: number | undefined
@@ -160,6 +160,7 @@
 				})
 
 				adjustCamera(boundingBox)
+				resetCamera()
 
 				// Calculate and display surface area and volume
 				surfaceArea = calculateSurfaceArea(model).toFixed(3)
@@ -291,6 +292,7 @@
 		</div>
 	{:else}
 		<div class="control_buttons">
+			<IconButton name="restart_alt" on:click={resetCamera} tooltipText="Reset Camera" />
 			<IconButton
 				name={isUIVisible ? 'visibility' : 'visibility_off'}
 				on:click={toggleInfoVisibility}
