@@ -12,6 +12,7 @@
 	import Loader from './Loader.svelte'
 	import IconButton from '$elements/IconButton.svelte'
 	import { fade } from 'svelte/transition'
+	import { addToast } from '$lib/components/Toaster.svelte'
 
 	const demoFile = './demo.stp'
 
@@ -192,17 +193,12 @@
 			onWindowResize()
 			isModelLoading = false
 			isModelRendered = true
-			// TODO: Add toast notifications
-			// toast.success('Model Loaded', {
-			// 	description: 'STEP model has been loaded successfully.'
-			// })
+
+			sendToast('Success', 'Model loaded successfully.', 'green')
 		} catch (error) {
 			console.error('Error initializing Three.js scene: ', error)
 			isModelLoading = false
-			// TODO: Add toast notifications
-			// toast.error('Error Loading Model', {
-			// 	description: error as string
-			// })
+			sendToast('Error', (error as string) || 'Error initializing Three.js scene.', 'red')
 		}
 	}
 
@@ -249,6 +245,7 @@
 		boundingBoxVolume = ''
 		boundingBoxDimensions = ''
 		isModelRendered = false
+		sendToast('Success', 'Model removed successfully.', 'green')
 	}
 
 	onMount(() => {
@@ -291,6 +288,16 @@
 
 	function numberWithCommas(x: string | number) {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+	}
+
+	function sendToast(title: string, description: string, color: string) {
+		addToast({
+			data: {
+				title,
+				description,
+				color
+			}
+		})
 	}
 
 	$: if (src && container) {
