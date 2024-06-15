@@ -1,5 +1,6 @@
 <script lang="ts">
 	import TopNav from './TopNav.svelte'
+	import Toaster from '$lib/components/Toaster.svelte'
 	import '$lib/styles/index.css'
 </script>
 
@@ -9,6 +10,7 @@
 		<slot />
 	</main>
 </div>
+<Toaster />
 
 <style>
 	.site_wrapper {

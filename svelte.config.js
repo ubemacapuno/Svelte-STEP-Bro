@@ -1,3 +1,4 @@
+import { preprocessMeltUI, sequence } from '@melt-ui/pp'
 import preprocess from 'svelte-preprocess'
 import nested from 'postcss-nested'
 import postcssEnvFunction from 'postcss-env-function'
@@ -5,10 +6,9 @@ import minmax from 'postcss-media-minmax'
 import postcssCustomMedia from 'postcss-custom-media'
 import atImport from 'postcss-import'
 import adapter from '@sveltejs/adapter-vercel'
-
-/** @type {import('@sveltejs/kit').Config} */
+/** @type {import('@sveltejs/kit').Config}*/
 const config = {
-	preprocess: [
+	preprocess: sequence([
 		preprocess({
 			postcss: {
 				prependData: `
@@ -38,9 +38,9 @@ const config = {
 					})
 				]
 			}
-		})
-	],
-
+		}),
+		preprocessMeltUI()
+	]),
 	kit: {
 		adapter: adapter(),
 		alias: {
@@ -51,5 +51,4 @@ const config = {
 		}
 	}
 }
-
 export default config
