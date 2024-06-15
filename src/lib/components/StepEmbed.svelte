@@ -7,10 +7,11 @@
 		loadStepUsingWorker,
 		calculateSurfaceArea,
 		calculateVolume
-	} from '../../utilities/step-helpers'
+	} from '$utilities/step-helpers'
 	import Button from '$elements/Button.svelte'
 	import Loader from './Loader.svelte'
 	import IconButton from '$elements/IconButton.svelte'
+	import { fade } from 'svelte/transition'
 
 	const demoFile = './demo.stp'
 
@@ -37,6 +38,7 @@
 	let renderer: THREE.WebGLRenderer
 	let controls: OrbitControls
 	let viewSize: number
+	let initialCameraState: { position: THREE.Vector3; zoom: number; target: THREE.Vector3 } | null
 
 	// 3D Model Vars
 	let src = ''
@@ -67,6 +69,12 @@
 		camera.position.set(center.x, center.y, center.z + viewSize)
 		camera.lookAt(center)
 		camera.updateProjectionMatrix() // called for camera changes to take effect
+
+		initialCameraState = {
+			position: camera.position.clone(),
+			zoom: camera.zoom,
+			target: center.clone()
+		}
 	}
 
 	// Resize the renderer when the window is resized
@@ -84,31 +92,25 @@
 		}
 	}
 
-	/**
-	 * TODOs:
-	 * - light/dark mode
-	 * - camera reset
-	 * - orthographic/perspective camera switch
-	 * - zoom in/out
-	 * - mesh selection
-	 */
-
-	// function toggleLightDarkMode() {
-	// 	currentBackgroundColor =
-	// 		currentBackgroundColor === modeColors.light ? modeColors.dark : modeColors.light
-
-	// 	if (renderer) {
-	// 		renderer.setClearColor(currentBackgroundColor)
-	// 		renderer.render(scene, camera) // re-render scene
-	// 	}
-	// }
-
 	function resetCamera() {
-		if (!model || !camera) return
-		const boundingBox = new THREE.Box3().setFromObject(model)
-		adjustCamera(boundingBox)
-		controls?.target.copy(boundingBox.getCenter(new THREE.Vector3())) // Center the model
-		controls?.update()
+		if (!model || !camera || !initialCameraState) return
+		camera.position.copy(initialCameraState.position)
+		camera.zoom = initialCameraState.zoom
+		camera.updateProjectionMatrix()
+		if (controls) {
+			controls.target.copy(initialCameraState.target)
+			controls.update()
+		}
+	}
+
+	function toggleLightDarkMode() {
+		currentBackgroundColor =
+			currentBackgroundColor === modeColors.light ? modeColors.dark : modeColors.light
+
+		if (renderer) {
+			renderer.setClearColor(currentBackgroundColor)
+			renderer.render(scene, camera) // re-render scene
+		}
 	}
 
 	function debounce(func: (...args: any[]) => void, timeout = 300) {
@@ -146,7 +148,6 @@
 				isModelLoading = false
 				scene.add(model)
 				const boundingBox = new THREE.Box3().setFromObject(model)
-				model.position.sub(boundingBox.getCenter(new THREE.Vector3()))
 
 				model.traverse((child) => {
 					if (child instanceof THREE.Mesh) {
@@ -160,7 +161,6 @@
 				})
 
 				adjustCamera(boundingBox)
-				resetCamera()
 
 				// Calculate and display surface area and volume
 				surfaceArea = calculateSurfaceArea(model).toFixed(3)
@@ -178,9 +178,11 @@
 				scene.add(ambientLight, directionalLight)
 
 				controls = new OrbitControls(camera, renderer.domElement)
+				controls.target.copy(boundingBox.getCenter(new THREE.Vector3()))
+				controls.update()
 				;(function animate() {
 					requestAnimationFrame(animate)
-					controls.update()
+					controls?.update()
 					renderer.render(scene, camera)
 				})()
 			}
@@ -190,12 +192,14 @@
 			onWindowResize()
 			isModelLoading = false
 			isModelRendered = true
+			// TODO: Add toast notifications
 			// toast.success('Model Loaded', {
 			// 	description: 'STEP model has been loaded successfully.'
 			// })
 		} catch (error) {
 			console.error('Error initializing Three.js scene: ', error)
 			isModelLoading = false
+			// TODO: Add toast notifications
 			// toast.error('Error Loading Model', {
 			// 	description: error as string
 			// })
@@ -254,7 +258,34 @@
 
 		return () => {
 			window.removeEventListener('resize', debouncedResize)
-			removeModel()
+
+			// Traverse scene and clean up materials and geometries
+			scene.traverse((object) => {
+				if (object instanceof THREE.Mesh) {
+					object.geometry.dispose()
+
+					if (Array.isArray(object.material)) {
+						object.material.forEach((material) => {
+							if (material instanceof THREE.Material) {
+								cleanupMaterial(material)
+							}
+						})
+					} else if (object.material instanceof THREE.Material) {
+						cleanupMaterial(object.material)
+					}
+				}
+			})
+
+			if (controls) {
+				controls.dispose()
+			}
+
+			if (renderer) {
+				renderer.dispose()
+				if (container && renderer.domElement.parentNode === container) {
+					container.removeChild(renderer.domElement)
+				}
+			}
 		}
 	})
 
@@ -269,12 +300,12 @@
 
 <div class="canvas_container" bind:this={container}>
 	{#if isModelLoading}
-		<div class="canvas_center flex">
+		<div class="canvas_center flex" transition:fade={{ duration: 300 }}>
 			<Loader />
 		</div>
 	{/if}
 	{#if !isModelRendered && !isModelLoading}
-		<div class="canvas_center flex">
+		<div class="canvas_center flex" transition:fade={{ duration: 300 }}>
 			<Button
 				on:click={() => {
 					modelFileInput.click()
@@ -291,28 +322,66 @@
 			>
 		</div>
 	{:else}
-		<div class="control_buttons">
-			<IconButton name="restart_alt" on:click={resetCamera} tooltipText="Reset Camera" />
+		<div class="control_buttons" transition:fade={{ duration: 300 }}>
+			<IconButton
+				name="restart_alt"
+				on:click={resetCamera}
+				tooltipText="Reset Camera"
+				disabled={!isModelRendered}
+			/>
 			<IconButton
 				name={isUIVisible ? 'visibility' : 'visibility_off'}
 				on:click={toggleInfoVisibility}
 				tooltipText={isUIVisible ? 'Hide info' : 'Show info'}
+				disabled={!isModelRendered}
 			/>
-			<Button outline on:click={removeModel}>Clear</Button>
+			<IconButton
+				name={currentBackgroundColor === modeColors.light ? 'light_mode' : 'dark_mode'}
+				on:click={toggleLightDarkMode}
+				tooltipText={currentBackgroundColor === modeColors.light
+					? 'Toggle dark mode'
+					: 'Toggle light mode'}
+				disabled={!isModelRendered}
+			/>
+			<IconButton
+				name="cancel"
+				accent={!model ? undefined : 'warning'}
+				on:click={removeModel}
+				tooltipText="Clear Model"
+				disabled={!isModelRendered}
+			/>
 		</div>
 	{/if}
 	{#if modelFileName && isUIVisible}
-		<p class="model_file_name">{modelFileName}</p>
+		<div class="model_file_name" transition:fade={{ duration: 300 }}>
+			<P as="span">
+				{modelFileName}
+			</P>
+		</div>
 	{/if}
 	{#if volume && surfaceArea && boundingBoxVolume && boundingBoxDimensions && isUIVisible}
-		<div class="info_box">
+		<div class="info_box" transition:fade={{ duration: 300 }}>
 			<div class="info_content">
-				<p class="highlight">Surface Area:</p>
-				{numberWithCommas(surfaceArea)} mm²
-				<p class="highlight">Actual Part Volume:</p>
-				{numberWithCommas(volume)} mm³
-				<p class="highlight">Bounding Box Volume:</p>
-				{boundingBoxDimensions} = {numberWithCommas(boundingBoxVolume)} mm³
+				<div>
+					<P style="margin: 0;" accent="primary">Surface Area:</P>
+					<P as="span">
+						{numberWithCommas(surfaceArea)} mm²
+					</P>
+				</div>
+
+				<div>
+					<P style="margin: 0;" accent="primary">Actual Part Volume:</P>
+					<P as="span">
+						{numberWithCommas(volume)} mm³
+					</P>
+				</div>
+
+				<div>
+					<P style="margin: 0;" accent="primary">Bounding Box Volume:</P>
+					<P as="span">
+						{boundingBoxDimensions} = {numberWithCommas(boundingBoxVolume)} mm³
+					</P>
+				</div>
 			</div>
 		</div>
 	{/if}
@@ -326,66 +395,68 @@
 	/>
 </div>
 
-<style>
+<style lang="postcss">
 	.canvas_container {
-		height: 85vh;
-		width: 100%;
-		position: relative;
-		margin: 0.5rem 0;
-	}
-
-	.canvas_center {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	.flex {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-		gap: var(--gap_small);
 		height: 100%;
 		width: 100%;
-	}
+		position: relative;
 
-	.control_buttons {
-		position: absolute;
-		top: 1rem;
-		right: 1rem;
-		display: flex;
-		align-items: center;
-		gap: var(--gap_smallest);
-	}
+		.canvas_center {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
 
-	.model_file_name {
-		position: absolute;
-		top: 1rem;
-		left: 1rem;
-		background-color: var(--transparent_backdrop);
-		padding: 0.5rem;
-		margin: 0.5rem;
-		border-radius: 0.5rem;
-		color: var(--primary_color);
-	}
+		.flex {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			gap: var(--gap_small);
+			height: 100%;
+			width: 100%;
+		}
 
-	.info_box {
-		position: absolute;
-		bottom: 1rem;
-		left: 1rem;
-	}
+		.control_buttons {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			display: flex;
+			align-items: center;
+			gap: var(--gap_smallest);
+			background-color: var(--transparent_backdrop);
+			padding: var(--gap_smallest);
+			margin: var(--gap_smallest);
+			border-radius: var(--border_radius);
+		}
 
-	.info_content {
-		background-color: var(--transparent_backdrop);
-		padding: 0.5rem;
-		margin: 0.5rem;
-		border-radius: 0.5rem;
-		color: var(--text_color);
-	}
+		.model_file_name {
+			position: absolute;
+			top: 1rem;
+			left: 1rem;
+			background-color: var(--transparent_backdrop);
+			padding: var(--gap_smallest);
+			margin: var(--gap_smallest);
+			border-radius: var(--gap_smallest);
+		}
 
-	.highlight {
-		color: var(--primary_color);
+		.info_box {
+			position: absolute;
+			bottom: 1rem;
+			left: 1rem;
+		}
+
+		.info_content {
+			background-color: var(--transparent_backdrop);
+			padding: var(--gap_smallest);
+			margin: var(--gap_smallest);
+			border-radius: var(--border_radius);
+			color: var(--text_color);
+			display: flex;
+			flex-direction: column;
+			gap: var(--gap);
+			justify-content: flex-start;
+		}
 	}
 </style>
