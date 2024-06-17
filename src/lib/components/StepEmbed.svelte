@@ -13,6 +13,8 @@
 	import IconButton from '$elements/IconButton.svelte'
 	import { fade } from 'svelte/transition'
 	import { addToast } from '$lib/components/Toaster.svelte'
+	import Modal from './Modal.svelte'
+	import Divider from '$elements/Divider.svelte'
 
 	const demoFile = './demo.stp'
 
@@ -330,6 +332,41 @@
 		</div>
 	{:else}
 		<div class="control_buttons" transition:fade={{ duration: 300 }}>
+			<Modal>
+				<span slot="trigger">
+					<IconButton name="info" tooltipText="Info" />
+				</span>
+				<div slot="title">Instructions</div>
+				<div>
+					<H3 accent="primary">Loading a STEP File</H3>
+					<p>
+						Click "Import STEP" to upload your file (.stp or .step). Click "Load Demo" to load a
+						demo model.
+					</p>
+					<H3 accent="primary">Viewing and Navigating</H3>
+					<p>
+						Zoom: Use mouse wheel.<br />Rotate: Hold left mouse button and move.<br />Move: Hold
+						right mouse button and move.
+					</p>
+					<H3 accent="primary">Additional Controls</H3>
+					<p>
+						Reset Camera<br />Toggle Info<br />Toggle Mode
+						<br />Remove Model
+					</p>
+					<H3 accent="primary">Model Information (currently in mm² only)</H3>
+					<p>
+						Surface Area<br />Part Volume<br />Bounding Box
+					</p>
+					<H3 accent="primary">Notes</H3>
+					<p>
+						Supports .stp and .step formats.<br />Toggle info and mode for better visibility.<br
+						/>Keep file size reasonable for performance.
+					</p>
+				</div>
+			</Modal>
+
+			<Divider />
+
 			<IconButton
 				name="restart_alt"
 				on:click={resetCamera}
