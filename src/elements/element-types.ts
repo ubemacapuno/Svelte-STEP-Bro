@@ -27,3 +27,4 @@ export type IconName =
 	| 'light_mode'
 	| 'visibility' // eye
 	| 'visibility_off'
+	| 'info'

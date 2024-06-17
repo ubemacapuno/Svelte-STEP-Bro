@@ -56,7 +56,7 @@
 		gap: 0.5rem;
 	}
 
-	@media (min-width: 768px) {
+	@media (min-width: 900px) {
 		.toast-container {
 			bottom: 0;
 			top: auto;
