@@ -2,9 +2,10 @@
 	import { enhance } from '$app/forms'
 	import type { SubmitFunction } from '@sveltejs/kit'
 	import { page } from '$app/stores'
-	import MenuItem from './MenuItem.svelte'
 	import { browser } from '$app/environment'
 	import { invalidateAll } from '$app/navigation'
+	import Tooltip from './Tooltip.svelte'
+	import IconButton from '$elements/IconButton.svelte'
 
 	export let action: string
 
@@ -36,10 +37,10 @@
 </script>
 
 <form method="POST" use:enhance={submitUpdateTheme}>
-	<MenuItem
+	<IconButton
 		formaction="{action}&theme={currentTheme === 'dark' ? 'light' : 'dark'}&redirectTo={$page.url
 			.pathname}"
-		iconName="{currentTheme}_mode"
-		type="submit">Theme</MenuItem
-	>
+		name="{currentTheme}_mode"
+		type="submit"
+	/>
 </form>

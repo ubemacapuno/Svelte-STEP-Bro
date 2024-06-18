@@ -19,7 +19,7 @@
 	// STEP Colors
 	const edgeColor = 0x333333
 	const lightingColor = 0xffffff
-	const modeColors = { light: 0xd9e7fc, dark: 0x232323 }
+	const modeColors = { light: 0xdcdcdc, dark: 0x232323 }
 
 	let container: HTMLElement
 	let isModelLoading = false
@@ -104,16 +104,15 @@
 		}
 	}
 
-	function toggleLightDarkMode() {
-		currentBackgroundColor =
-			currentBackgroundColor === modeColors.light ? modeColors.dark : modeColors.light
+	function updateBackgroundColor() {
+		const theme = document.documentElement.getAttribute('data-theme')
+		currentBackgroundColor = theme === 'light' ? modeColors.light : modeColors.dark
 
 		if (renderer) {
 			renderer.setClearColor(currentBackgroundColor)
 			renderer.render(scene, camera) // re-render scene
 		}
 	}
-
 	function debounce(func: (...args: any[]) => void, timeout = 300) {
 		let timer: number | undefined
 		return (...args: any[]) => {
@@ -137,7 +136,7 @@
 			renderer = new THREE.WebGLRenderer({ antialias: true })
 			renderer.setSize(container.clientWidth, container.clientHeight)
 			container.appendChild(renderer.domElement)
-			renderer.setClearColor(currentBackgroundColor)
+			updateBackgroundColor()
 
 			const response = await fetch(src)
 			if (!response.ok) throw new Error('Failed to fetch the file')
@@ -253,6 +252,14 @@
 			initScene()
 		}
 
+		const observer = new MutationObserver(() => {
+			updateBackgroundColor()
+		})
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['data-theme']
+		})
+
 		return () => {
 			window.removeEventListener('resize', debouncedResize)
 
@@ -340,14 +347,6 @@
 				name={isUIVisible ? 'visibility' : 'visibility_off'}
 				on:click={toggleInfoVisibility}
 				tooltipText={isUIVisible ? 'Hide info' : 'Show info'}
-				disabled={!isModelRendered}
-			/>
-			<IconButton
-				name={currentBackgroundColor === modeColors.light ? 'light_mode' : 'dark_mode'}
-				on:click={toggleLightDarkMode}
-				tooltipText={currentBackgroundColor === modeColors.light
-					? 'Toggle dark mode'
-					: 'Toggle light mode'}
 				disabled={!isModelRendered}
 			/>
 			<IconButton

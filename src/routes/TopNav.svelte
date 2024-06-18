@@ -45,7 +45,9 @@
 			</Modal>
 		</Tooltip>
 
-		<ThemeSelector action="?/setTheme" />
+		<Tooltip content="Theme">
+			<ThemeSelector action="?/setTheme" />
+		</Tooltip>
 
 		<Divider />
 

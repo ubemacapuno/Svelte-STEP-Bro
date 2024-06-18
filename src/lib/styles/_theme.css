@@ -15,4 +15,6 @@
 	--button_border_color: var(--grey_9);
 	--modal_color: var(--white);
 	--disabled_color: var(--grey_9);
+	--transparent_backdrop: rgba(255, 255, 255, 0.8);
+	--tooltip_bg_color: var(--grey_9);
 }
