@@ -24,7 +24,7 @@
 	let container: HTMLElement
 	let isModelLoading = false
 	let debouncedResize: (...args: any[]) => void
-	let currentBackgroundColor = modeColors.dark
+	let theme: 'light' | 'dark' = 'dark'
 
 	let surfaceArea = ''
 	let volume = ''
@@ -105,14 +105,15 @@
 	}
 
 	function updateBackgroundColor() {
-		const theme = document.documentElement.getAttribute('data-theme')
-		currentBackgroundColor = theme === 'light' ? modeColors.light : modeColors.dark
+		theme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark'
+		const backgroundColor = modeColors[theme]
 
 		if (renderer) {
-			renderer.setClearColor(currentBackgroundColor)
+			renderer.setClearColor(backgroundColor)
 			renderer.render(scene, camera) // re-render scene
 		}
 	}
+
 	function debounce(func: (...args: any[]) => void, timeout = 300) {
 		let timer: number | undefined
 		return (...args: any[]) => {
