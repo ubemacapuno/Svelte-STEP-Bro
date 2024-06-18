@@ -2,6 +2,7 @@
 	import Tooltip from '$lib/components/Tooltip.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import Divider from '$elements/Divider.svelte'
+	import ThemeSelector from '$lib/components/ThemeSelector.svelte'
 </script>
 
 <div class="nav_wrapper">
@@ -43,6 +44,8 @@
 				</div>
 			</Modal>
 		</Tooltip>
+
+		<ThemeSelector action="?/setTheme" />
 
 		<Divider />
 
