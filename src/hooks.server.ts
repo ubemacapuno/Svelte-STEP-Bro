@@ -5,7 +5,7 @@ const theme: Handle = async ({ event, resolve }) => {
 	let theme: string | null = null
 
 	const newTheme = event.url.searchParams.get('theme')
-	const cookieTheme = event.cookies.get('fw-theme')
+	const cookieTheme = event.cookies.get('step-theme')
 
 	if (newTheme) {
 		theme = newTheme

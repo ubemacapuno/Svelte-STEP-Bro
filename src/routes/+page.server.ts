@@ -5,7 +5,7 @@ export const actions = {
 		const theme = url.searchParams.get('theme')
 		const redirectTo = url.searchParams.get('redirectTo')
 		if (!theme) return
-		cookies.set('fw-theme', theme, {
+		cookies.set('step-theme', theme, {
 			path: '/',
 			maxAge: 60 * 60 * 24 * 365
 		})
