@@ -2,7 +2,6 @@ import { redirect } from '@sveltejs/kit'
 
 export const actions = {
 	setTheme: async function ({ url, cookies }) {
-		console.log('Running setTheme action')
 		const theme = url.searchParams.get('theme')
 		const redirectTo = url.searchParams.get('redirectTo')
 		if (!theme) return
