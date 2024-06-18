@@ -1,0 +1,20 @@
+/* ? Here we can set different themes. Dark is default */
+
+[data-theme='light'] body {
+	--text_color: var(--grey_3);
+	--title_color: var(--grey_1);
+	--hover_color: var(--white_2);
+	--line_color: var(--white_2);
+	--text_hover_color: var(--grey_1);
+	--subtext_color: var(--grey_7);
+	--border_color: var(--grey_7);
+	--placeholder_color: var(--grey_7);
+	--bg_color: var(--white_3);
+	--sheet_color: var(--white);
+	--card_color: var(--white);
+	--button_border_color: var(--grey_9);
+	--modal_color: var(--white);
+	--disabled_color: var(--grey_9);
+	--transparent_backdrop: rgba(255, 255, 255, 0.8);
+	--tooltip_bg_color: var(--grey_9);
+}

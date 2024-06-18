@@ -81,6 +81,7 @@ body {
 	--bg_color: var(--grey_2);
 	--line_color: var(--grey_3);
 	--modal_color: var(--grey_4);
+	--tooltip_bg_color: var(--grey_4);
 	--card_color: var(--grey_5);
 	--input_border_color: var(--grey_6);
 	--button_border_color: var(--grey_a_2);

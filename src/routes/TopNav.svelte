@@ -2,6 +2,7 @@
 	import Tooltip from '$lib/components/Tooltip.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import Divider from '$elements/Divider.svelte'
+	import ThemeSelector from '$lib/components/ThemeSelector.svelte'
 </script>
 
 <div class="nav_wrapper">
@@ -29,19 +30,23 @@
 					</p>
 					<H3 accent="primary">Additional Controls</H3>
 					<p>
-						Reset Camera<br />Toggle Info<br />Toggle Mode
-						<br />Remove Model
+						Toggle light/dark theme<br />
+						Reset camera<br />
+						Toggle info<br />
+						Remove model
 					</p>
-					<H3 accent="primary">Model Information (currently in metric)</H3>
+					<H3 accent="primary">Model information (currently in metric)</H3>
 					<p>
-						Surface Area<br />Part Volume<br />Bounding Box
-					</p>
-					<H3 accent="primary">Notes</H3>
-					<p>
-						Currently supports .stp and .step formats.<br />
+						Surface area<br />
+						Part volume<br />
+						Bounding box
 					</p>
 				</div>
 			</Modal>
+		</Tooltip>
+
+		<Tooltip content="Theme">
+			<ThemeSelector action="?/setTheme" />
 		</Tooltip>
 
 		<Divider />

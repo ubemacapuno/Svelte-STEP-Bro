@@ -1,7 +1,7 @@
 /* Tooltip */
 .tooltip {
-	background: var(--grey_4);
-	color: var(--grey_9);
+	background: var(--tooltip_bg_color);
+	color: var(--text_color);
 	padding: var(--gap_smallest);
 	font-size: var(--font_small);
 	max-width: var(--min_width);
