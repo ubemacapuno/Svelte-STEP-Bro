@@ -1,6 +1,6 @@
 # Svelte STEP Bro
 
-[Svelte STEP Bro](https://stepbro.vercel.app/) is a SvelteKit application designed to render STEP (Standard for the Exchange of Product model data) files directly in the browser. Built using SvelteKit and integrating Three.js along with occt-import-js, it offers a seamless solution for engineers, machinists, and professionals who frequently work with CAD files. Recognizing the high costs associated with CAD software licenses, Svelte STEP Bro is developed as a free alternative, facilitating easy viewing and sharing of 3D models.
+[Svelte STEP Bro](https://stepbro.vercel.app/) is a SvelteKit application designed to render STEP (Standard for the Exchange of Product model data) files directly in the browser. Built using SvelteKit and integrating Three.js and occt-import-js, it offers a seamless solution for those who frequently work with CAD files. Recognizing the high costs associated with CAD software licenses, Svelte STEP Bro is developed as a simple and free alternative, facilitating easy viewing of 3D models.
 
 This project also serves as a deep dive into web-based 3D programming, leveraging modern web technologies to bring complex 3D CAD data to the web platform, using the fun and modern [SvelteKit meta-framework](https://kit.svelte.dev/docs/introduction#what-is-sveltekit).
 
@@ -16,7 +16,7 @@ View the deployed <a href="https://stepbro.vercel.app/">DEMO here</a>. To get Sv
 
 ### Prerequisites
 
-Before you begin, ensure you have the Node.js version 18 or later. As of this writing, v21.5.0 is NOT supported for the Vercel adapter, so if using the Vercel adapter, please be sure your Node.js version is compatible to prevent build errors.
+Before you begin, ensure you have the Node.js version 18 or later. As of this writing, v21.5.0 is NOT supported for the Vercel adapter, so if using the Vercel adapter, please be sure your Node.js version is compatible to prevent build errors. Alternatively, if using Vercel, you can build locally using the [Vercel CLI](https://vercel.com/docs/cli).
 
 ### Installing
 
@@ -55,17 +55,19 @@ To deploy this on a live system, you can use Vercel, Netlify, or any other stati
 - [SvelteKit](https://kit.svelte.dev/)
 - [Vite](https://vitejs.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [melt-ui](https://melt-ui.com/)
 
 ## Lessons Learned:
 
-- Better understanding of using external libraries such as three.js within a Svelte environment
-- Better understanding of converting STEP files and rendering 3D graphics in the browser.
+- Improving performance by implementing [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) to efficiently offload resource-intensive tasks, such as STEP file processing, from the main thread.
+- Implementing external libraries such as three.js and occt-import-js within a Svelte project.
+- Implementing accessible and customizable Svelte UI components with [melt-ui](https://melt-ui.com/).
+- Converting STEP files and rendering 3D graphics in the browser.
 
 ## Optimizations:
 
 - Add other common CAD file formats.
-- Add more tools to the 3D model viewer.
-- Add instructions on how to use current and future features.
+- Add more tools/functionality to the 3D model viewer (ex. [raycasting](https://threejs.org/docs/#api/en/core/Raycaster)).
 
 ## License
 
