@@ -56,7 +56,7 @@ export function loadStepUsingWorker(fileData: ArrayBuffer): Promise<THREE.Object
 	})
 }
 
-export function calculateSurfaceArea(model: THREE.Object3D): number {
+export function calculateSurfaceArea(model: THREE.Object3D): { mm2: number; in2: number } {
 	let surfaceArea = 0
 
 	model.traverse((child) => {
@@ -81,7 +81,14 @@ export function calculateSurfaceArea(model: THREE.Object3D): number {
 		}
 	})
 
-	return surfaceArea // Surface area in square millimeters (mm²)
+	// Conversion factor from square millimeters to square inches
+	const MM2_TO_IN2 = 0.0015500031
+	const surfaceAreaInInches = surfaceArea * MM2_TO_IN2
+
+	return {
+		mm2: surfaceArea,
+		in2: surfaceAreaInInches
+	}
 }
 
 function calculateTriangleArea(vA: THREE.Vector3, vB: THREE.Vector3, vC: THREE.Vector3): number {
@@ -91,7 +98,7 @@ function calculateTriangleArea(vA: THREE.Vector3, vB: THREE.Vector3, vC: THREE.V
 	return 0.5 * cross.length()
 }
 
-export function calculateVolume(model: THREE.Object3D): number {
+export function calculateVolume(model: THREE.Object3D): { mm3: number; in3: number } {
 	let volume = 0
 
 	model.traverse((child) => {
@@ -116,7 +123,14 @@ export function calculateVolume(model: THREE.Object3D): number {
 		}
 	})
 
-	return Math.abs(volume) // Volume in cubic millimeters (mm³)
+	const volumeInCubicMillimeters = Math.abs(volume) // Volume in cubic millimeters (mm³)
+	const MM3_TO_IN3 = 0.0000610237
+	const volumeInCubicInches = volumeInCubicMillimeters * MM3_TO_IN3
+
+	return {
+		mm3: volumeInCubicMillimeters,
+		in3: volumeInCubicInches
+	}
 }
 
 function signedVolumeOfTriangle(p1: THREE.Vector3, p2: THREE.Vector3, p3: THREE.Vector3): number {
