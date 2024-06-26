@@ -32,8 +32,9 @@
 					<p>
 						Toggle light/dark theme<br />
 						Reset camera<br />
-						Toggle metric/imperial units<br />
-						Remove model
+						Toggle info<br />
+						Remove model<br />
+						Toggle metric/imperial units
 					</p>
 					<H3 accent="primary">Model information</H3>
 					<p>
