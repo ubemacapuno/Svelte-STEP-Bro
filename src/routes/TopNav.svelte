@@ -32,10 +32,10 @@
 					<p>
 						Toggle light/dark theme<br />
 						Reset camera<br />
-						Toggle info<br />
+						Toggle metric/imperial units<br />
 						Remove model
 					</p>
-					<H3 accent="primary">Model information (currently in metric)</H3>
+					<H3 accent="primary">Model information</H3>
 					<p>
 						Surface area<br />
 						Part volume<br />
