@@ -13,6 +13,7 @@
 	import IconButton from '$elements/IconButton.svelte'
 	import { fade } from 'svelte/transition'
 	import { addToast } from '$lib/components/Toaster.svelte'
+	import Switch from './Switch.svelte'
 
 	const demoFile = './demo.stp'
 
@@ -28,6 +29,7 @@
 
 	let surfaceArea = ''
 	let volume = ''
+	let boundingBox: THREE.Box3 | null = null
 	let boundingBoxVolume = ''
 	let boundingBoxDimensions = ''
 	let isUIVisible = true
@@ -46,6 +48,9 @@
 	let modelFileInput: HTMLInputElement
 	let modelFileName = ''
 	let isModelRendered = false
+	$: isMetric = true
+
+	const mmToIn = 0.0393701
 	const fileTypes = '.stp, .step'
 
 	function toggleInfoVisibility() {
@@ -148,7 +153,7 @@
 			if (model) {
 				isModelLoading = false
 				scene.add(model)
-				const boundingBox = new THREE.Box3().setFromObject(model)
+				boundingBox = new THREE.Box3().setFromObject(model)
 
 				model.traverse((child) => {
 					if (child instanceof THREE.Mesh) {
@@ -164,14 +169,30 @@
 				adjustCamera(boundingBox)
 
 				// Calculate and display surface area and volume
-				surfaceArea = calculateSurfaceArea(model).toFixed(3)
-				volume = calculateVolume(model).toFixed(3)
+				surfaceArea = (
+					isMetric
+						? calculateSurfaceArea(model).mm2.toFixed(3)
+						: calculateSurfaceArea(model).in2.toFixed(3)
+				).toString()
+
+				volume = isMetric
+					? calculateVolume(model).mm3.toFixed(3)
+					: calculateVolume(model).in3.toFixed(3)
 
 				// Calculate bounding box volume and dimensions
 				const boxSize = boundingBox.getSize(new THREE.Vector3())
 				const boxVolume = boxSize.x * boxSize.y * boxSize.z
-				boundingBoxVolume = boxVolume.toFixed(3)
-				boundingBoxDimensions = `${boxSize.x.toFixed(3)}mm × ${boxSize.y.toFixed(3)}mm × ${boxSize.z.toFixed(3)}mm`
+
+				// Set boundingBox vars according to isMetric
+				if (isMetric) {
+					boundingBoxVolume = boxVolume.toFixed(3)
+					boundingBoxDimensions = `${boxSize.x.toFixed(3)} mm × ${boxSize.y.toFixed(3)} mm × ${boxSize.z.toFixed(3)} mm`
+				} else {
+					const boxSizeInInches = boxSize.clone().multiplyScalar(mmToIn)
+					const boxVolumeInInches = boxVolume * Math.pow(mmToIn, 3)
+					boundingBoxVolume = boxVolumeInInches.toFixed(3)
+					boundingBoxDimensions = `${boxSizeInInches.x.toFixed(3)} in × ${boxSizeInInches.y.toFixed(3)} in × ${boxSizeInInches.z.toFixed(3)} in`
+				}
 
 				const ambientLight = new THREE.AmbientLight(lightingColor)
 				const directionalLight = new THREE.DirectionalLight(lightingColor, 1.0)
@@ -311,6 +332,33 @@
 	$: if (src && container) {
 		initScene()
 	}
+
+	$: if (model) {
+		surfaceArea = (
+			isMetric
+				? calculateSurfaceArea(model).mm2.toFixed(3)
+				: calculateSurfaceArea(model).in2.toFixed(3)
+		).toString()
+
+		volume = isMetric
+			? calculateVolume(model).mm3.toFixed(3)
+			: calculateVolume(model).in3.toFixed(3)
+
+		if (boundingBox) {
+			const boxSize = boundingBox.getSize(new THREE.Vector3())
+			const boxVolume = boxSize.x * boxSize.y * boxSize.z
+
+			if (isMetric) {
+				boundingBoxVolume = boxVolume.toFixed(3)
+				boundingBoxDimensions = `${boxSize.x.toFixed(3)} mm × ${boxSize.y.toFixed(3)} mm × ${boxSize.z.toFixed(3)} mm`
+			} else {
+				const boxSizeInInches = boxSize.clone().multiplyScalar(mmToIn)
+				const boxVolumeInInches = boxVolume * Math.pow(mmToIn, 3)
+				boundingBoxVolume = boxVolumeInInches.toFixed(3)
+				boundingBoxDimensions = `${boxSizeInInches.x.toFixed(3)} in × ${boxSizeInInches.y.toFixed(3)} in × ${boxSizeInInches.z.toFixed(3)} in`
+			}
+		}
+	}
 </script>
 
 <div class="canvas_container" bind:this={container}>
@@ -369,24 +417,31 @@
 	{#if volume && surfaceArea && boundingBoxVolume && boundingBoxDimensions && isUIVisible}
 		<div class="info_box" transition:fade={{ duration: 300 }}>
 			<div class="info_content">
-				<div>
-					<P style="margin: 0;" accent="primary">Surface Area:</P>
-					<P as="span">
-						{numberWithCommas(surfaceArea)} mm²
-					</P>
+				<div class="inline_flex">
+					<div>
+						<P style="margin: 0;" accent="primary">Surface Area:</P>
+						<P as="span">
+							{numberWithCommas(surfaceArea)}
+							{isMetric ? 'mm²' : 'in²'}
+						</P>
+					</div>
+					<Switch bind:value={isMetric} design="multi" fontSize={12} />
 				</div>
 
 				<div>
 					<P style="margin: 0;" accent="primary">Actual Part Volume:</P>
 					<P as="span">
-						{numberWithCommas(volume)} mm³
+						{numberWithCommas(volume)}
+						{isMetric ? 'mm³' : 'in³'}
 					</P>
 				</div>
 
 				<div>
 					<P style="margin: 0;" accent="primary">Bounding Box Volume:</P>
 					<P as="span">
-						{boundingBoxDimensions} = {numberWithCommas(boundingBoxVolume)} mm³
+						{boundingBoxDimensions} = {numberWithCommas(boundingBoxVolume)}{isMetric
+							? 'mm³'
+							: 'in³'}
 					</P>
 				</div>
 			</div>
@@ -464,6 +519,13 @@
 			flex-direction: column;
 			gap: var(--gap);
 			justify-content: flex-start;
+		}
+
+		.inline_flex {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: var(--gap_smallest);
 		}
 	}
 </style>
