@@ -18,7 +18,7 @@
 					<H3 accent="primary">Loading a STEP File</H3>
 					<p>
 						Click "Import STEP" to upload your file (.stp or .step). Click "Load Demo" to load a
-						demo model.
+						demo model. Models are shown in orthographic view.
 					</p>
 					<H3 accent="primary">Viewing and Navigating</H3>
 					<p>
