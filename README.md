@@ -1,18 +1,18 @@
-# Svelte STEP Bro
+# Svelte STEP
 
-[Svelte STEP Bro](https://stepbro.vercel.app/) is a SvelteKit application designed to render STEP (Standard for the Exchange of Product model data) files directly in the browser. Built using SvelteKit and integrating Three.js and occt-import-js, it offers a seamless solution for those who frequently work with CAD files. Recognizing the high costs associated with CAD software licenses, Svelte STEP Bro is developed as a simple and free alternative, facilitating easy viewing of 3D models.
+[Svelte STEP](https://stepbro.vercel.app/) is a SvelteKit application designed to render STEP (Standard for the Exchange of Product model data) files directly in the browser. Built using SvelteKit and integrating Three.js and occt-import-js, it offers a seamless solution for those who frequently work with CAD files. Recognizing the high costs associated with CAD software licenses, Svelte STEP is developed as a simple and free alternative, facilitating easy viewing of 3D models.
 
 This project also serves as a deep dive into web-based 3D programming, leveraging modern web technologies to bring complex 3D CAD data to the web platform, using the fun and modern [SvelteKit meta-framework](https://kit.svelte.dev/docs/introduction#what-is-sveltekit).
 
  <tr>
     <td width="60%"  style="align:center;" valign="top">
-            <img src="https://github.com/ubemacapuno/images-for-github-readme/blob/main/Svelte%20STEP%20Image.jpg?raw=true" width="60%"  alt="Svelte STEP Bro Raspberry Pi 5 Demo"/>
+            <img src="https://github.com/ubemacapuno/images-for-github-readme/blob/main/Svelte%20STEP%20Image.jpg?raw=true" width="60%"  alt="Svelte STEP Raspberry Pi 5 Demo"/>
     </td>
   </tr>
 
 ## Getting Started
 
-View the deployed <a href="https://stepbro.vercel.app/">DEMO here</a>. To get Svelte STEP Bro running on your local environment, follow the instructions below.
+View the deployed <a href="https://stepbro.vercel.app/">DEMO here</a>. To get Svelte STEP running on your local environment, follow the instructions below.
 
 ### Prerequisites
 
@@ -25,7 +25,7 @@ To set up your development environment, follow these steps:
 1. Clone the repository to your local machine:
 
 ```
-git clone https://github.com/ubemacapuno/Svelte-STEP-Bro.git
+git clone https://github.com/ubemacapuno/Svelte-STEP.git
 cd svelte-step-bro
 ```
 
@@ -66,9 +66,6 @@ To deploy this on a live system, you can use Vercel, Netlify, or any other stati
 
 ## Optimizations:
 
+- Add a tool to select points and measure distances.
 - Add other common CAD file formats.
 - Add more tools/functionality to the 3D model viewer (ex. [raycasting](https://threejs.org/docs/#api/en/core/Raycaster)).
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

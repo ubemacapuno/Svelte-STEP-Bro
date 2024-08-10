@@ -6,7 +6,7 @@
 </script>
 
 <div class="nav_wrapper">
-	<h1>Svelte STEP Bro</h1>
+	<h1>Svelte STEP</h1>
 	<div class="flex">
 		<Tooltip content="Instructions">
 			<Modal>
